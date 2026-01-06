@@ -42,14 +42,12 @@
       linear-gradient(180deg, var(--bg0), var(--bg1));
     overflow-x:hidden;
   }
-
   .wrap{width:min(1120px, 100%);}
 
   header{
     display:flex; align-items:center; justify-content:space-between; gap:10px;
     margin-bottom:12px; flex-wrap:wrap;
   }
-
   .brand{display:flex; align-items:center; gap:10px;}
   .logo{
     width:44px;height:44px;border-radius:14px;
@@ -134,20 +132,37 @@
     overflow:hidden;
   }
 
+  /* animated grid for "near actual" look */
+  .gridFX{
+    position:absolute; inset:-40% -20%;
+    background:
+      linear-gradient(rgba(85,214,255,.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(85,214,255,.06) 1px, transparent 1px);
+    background-size: 42px 42px;
+    transform: perspective(800px) rotateX(58deg) translateY(28%);
+    opacity:.25;
+    animation: gridMove 8s linear infinite;
+    pointer-events:none;
+  }
+  @keyframes gridMove{
+    from{background-position: 0 0, 0 0;}
+    to{background-position: 0 120px, 120px 0;}
+  }
+
   .scanLine{
     position:absolute;
     left:-40%;
     top:0;
     width:40%;
     height:100%;
-    background: linear-gradient(90deg, rgba(255,255,255,0), rgba(85,214,255,.20), rgba(255,255,255,0));
+    background: linear-gradient(90deg, rgba(255,255,255,0), rgba(85,214,255,.22), rgba(255,255,255,0));
     transform: skewX(-16deg);
-    animation: scan 4.8s ease-in-out infinite;
+    animation: scan 4.4s ease-in-out infinite;
     opacity:.55;
     pointer-events:none;
   }
   @keyframes scan{
-    0%, 35%{transform: translateX(-60%) skewX(-16deg)}
+    0%, 30%{transform: translateX(-60%) skewX(-16deg)}
     70%{transform: translateX(290%) skewX(-16deg)}
     100%{transform: translateX(290%) skewX(-16deg)}
   }
@@ -186,11 +201,20 @@
     position:relative;
     overflow:hidden;
   }
+  .digitsPanel::after{
+    content:"";
+    position:absolute; inset:-60% -40% auto -40%;
+    height:70%;
+    background: radial-gradient(circle at 50% 60%, rgba(85,214,255,.14), rgba(85,214,255,0) 70%);
+    pointer-events:none;
+  }
 
   .digitsTitle{
     display:flex; align-items:center; justify-content:space-between;
     gap:10px; flex-wrap:wrap;
     margin-bottom:10px;
+    position:relative;
+    z-index:1;
   }
   .digitsTitle b{font-size:13px; letter-spacing:.2px}
   .digitsTitle small{color:var(--muted); font-size:12px}
@@ -200,13 +224,15 @@
     gap:8px;
     flex-wrap:wrap;
     align-items:center;
+    position:relative;
+    z-index:1;
   }
   .digit{
     width:44px; height:52px;
     border-radius:12px;
     display:flex; align-items:center; justify-content:center;
     font-size:22px;
-    font-weight:800;
+    font-weight:900;
     letter-spacing:.5px;
     position:relative;
     border:1px solid rgba(255,255,255,.12);
@@ -221,27 +247,37 @@
   }
   .digit.revealed{
     background:
-      radial-gradient(140px 60px at 50% 35%, rgba(85,214,255,.18), rgba(85,214,255,0) 60%),
+      radial-gradient(140px 60px at 50% 35%, rgba(85,214,255,.20), rgba(85,214,255,0) 60%),
       linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
-    border-color: rgba(85,214,255,.35);
+    border-color: rgba(85,214,255,.40);
     box-shadow:
       inset 0 0 0 1px rgba(0,0,0,.35),
-      0 0 24px rgba(85,214,255,.18);
+      0 0 26px rgba(85,214,255,.20);
   }
   .digit.revealed span{
     color: rgba(234,241,255,.96);
-    text-shadow: 0 0 14px rgba(85,214,255,.35);
+    text-shadow: 0 0 16px rgba(85,214,255,.38);
   }
-  .digit.revealPop{ animation: revealPop .35s ease; }
+  .digit.revealPop{ animation: revealPop .42s cubic-bezier(.2,.9,.2,1); }
   @keyframes revealPop{
-    0%{transform: scale(.96); filter: brightness(.95)}
-    60%{transform: scale(1.03); filter: brightness(1.12)}
+    0%{transform: scale(.90); filter: brightness(.90)}
+    65%{transform: scale(1.08); filter: brightness(1.18)}
     100%{transform: scale(1); filter: brightness(1)}
+  }
+
+  .digitsAllGlow .digit.revealed{
+    box-shadow:
+      inset 0 0 0 1px rgba(0,0,0,.35),
+      0 0 38px rgba(247,211,106,.22),
+      0 0 26px rgba(85,214,255,.18);
+    border-color: rgba(247,211,106,.35);
   }
 
   .progressRow{
     margin-top:12px;
     display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    position:relative;
+    z-index:1;
   }
   .bar{
     width:240px; height:10px; border-radius:999px;
@@ -257,7 +293,7 @@
   }
   .hint{color:var(--muted); font-size:12.5px}
 
-  /* ===== Lock + vault illustration (SVG + CSS animation) ===== */
+  /* ===== Vault stage (more attractive sequence) ===== */
   .vaultStage{
     border-radius: 18px;
     background: rgba(255,255,255,.05);
@@ -274,15 +310,30 @@
     background: radial-gradient(circle at 50% 60%, rgba(247,211,106,.16), rgba(247,211,106,0) 70%);
     pointer-events:none;
   }
-
   .lockGlow{
     position:absolute;
-    width:260px;height:260px;border-radius:50%;
+    width:280px;height:280px;border-radius:50%;
     left:50%; top:45%;
     transform: translate(-50%,-50%);
     background: radial-gradient(circle at 50% 50%, rgba(85,214,255,.35), rgba(85,214,255,0) 68%);
     pointer-events:none;
+    opacity:.95;
+    animation: glowBreath 3.2s ease-in-out infinite;
   }
+  @keyframes glowBreath{
+    0%,100%{transform: translate(-50%,-50%) scale(1); opacity:.85}
+    50%{transform: translate(-50%,-50%) scale(1.05); opacity:1}
+  }
+
+  .ringsFX{
+    position:absolute; inset:0;
+    pointer-events:none;
+    opacity:.75;
+  }
+  .ringsFX svg{width:100%; height:100%;}
+  .spinSlow{transform-origin:50% 55%; animation: spin 10s linear infinite;}
+  .spinFast{transform-origin:50% 55%; animation: spin 5.4s linear infinite;}
+  @keyframes spin{from{transform:rotate(0deg)} to{transform:rotate(360deg)}}
 
   .vaultSvg{
     width:100%;
@@ -309,16 +360,23 @@
     100%{transform: translateX(0)}
   }
 
-  /* vault opening animation using CSS variables */
-  .vaultDoorsOpen #doorL{ transform: translateX(-84px); }
-  .vaultDoorsOpen #doorR{ transform: translateX(84px); }
-  .vaultDoorsOpen #shackle{ transform: translateY(-18px); }
-  #doorL, #doorR, #shackle{ transition: transform 1.05s ease; transform-origin:center; }
+  /* vault opening animation using CSS vars */
+  #doorL, #doorR, #shackle, #lockBody, #keyhole{
+    transition: transform 1.05s ease, filter .8s ease;
+    transform-origin:center;
+  }
+  .vaultDoorsOpen #doorL{ transform: translateX(-88px) rotate(-1deg); }
+  .vaultDoorsOpen #doorR{ transform: translateX(88px) rotate(1deg); }
+  .vaultDoorsOpen #shackle{ transform: translateY(-22px); }
+  .vaultDoorsOpen #lockBody{ filter: brightness(1.15); }
+  .vaultDoorsOpen #keyhole{ filter: brightness(1.25); }
 
   .lightBurst{
     position:absolute;
     inset:0;
-    background: radial-gradient(circle at 50% 55%, rgba(247,211,106,.28), rgba(247,211,106,0) 60%);
+    background:
+      radial-gradient(circle at 50% 55%, rgba(247,211,106,.35), rgba(247,211,106,0) 60%),
+      radial-gradient(circle at 50% 55%, rgba(85,214,255,.18), rgba(85,214,255,0) 70%);
     opacity:0;
     pointer-events:none;
   }
@@ -326,6 +384,29 @@
     opacity:1;
     transition: opacity .9s ease;
   }
+
+  .rays{
+    position:absolute;
+    left:50%; top:55%;
+    width:520px; height:520px;
+    transform: translate(-50%,-50%);
+    background: conic-gradient(
+      from 0deg,
+      rgba(247,211,106,.0),
+      rgba(247,211,106,.20),
+      rgba(247,211,106,.0),
+      rgba(85,214,255,.14),
+      rgba(247,211,106,.0),
+      rgba(247,211,106,.18),
+      rgba(247,211,106,.0)
+    );
+    mask-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 65%);
+    opacity:0;
+    pointer-events:none;
+    animation: raysSpin 6s linear infinite;
+  }
+  @keyframes raysSpin{from{transform:translate(-50%,-50%) rotate(0deg)} to{transform:translate(-50%,-50%) rotate(360deg)}}
+  .vaultDoorsOpen .rays{opacity:.9; transition: opacity .6s ease;}
 
   /* ===== Right panel ===== */
   .side{
@@ -460,13 +541,13 @@
   .toast.show{display:block; animation: pop .18s ease}
   @keyframes pop{from{transform:translateX(-50%) scale(.95); opacity:.6} to{transform:translateX(-50%) scale(1); opacity:1}}
 
-  /* Confetti */
-  .confetti{
+  /* Confetti + sparks canvas */
+  .confetti, .sparks{
     position:absolute; inset:0;
     pointer-events:none;
     opacity:0;
   }
-  .confetti.show{opacity:1; animation: fadeOut 1.2s ease forwards}
+  .confetti.show, .sparks.show{opacity:1; animation: fadeOut 1.2s ease forwards}
   @keyframes fadeOut{0%{opacity:1} 100%{opacity:0}}
 
   /* Final banner */
@@ -480,15 +561,33 @@
     border:1px solid rgba(255,255,255,.16);
     backdrop-filter: blur(10px);
     box-shadow: 0 18px 60px rgba(0,0,0,.55);
-    font-weight:800;
+    font-weight:900;
     letter-spacing:.3px;
     display:none;
-    z-index:5;
+    z-index:6;
     text-align:center;
     width:min(520px, 92%);
   }
   .finalBanner.show{display:block; animation: pop .18s ease}
   .finalBanner small{display:block; margin-top:6px; font-weight:600; color:var(--muted); font-size:12.5px}
+
+  .cinematicText{
+    position:absolute;
+    left:50%;
+    top:18px;
+    transform: translateX(-50%);
+    padding:10px 12px;
+    border-radius: 999px;
+    background: rgba(0,0,0,.42);
+    border:1px solid rgba(255,255,255,.14);
+    backdrop-filter: blur(10px);
+    font-weight:800;
+    letter-spacing:.2px;
+    display:none;
+    z-index:6;
+    color: rgba(234,241,255,.95);
+  }
+  .cinematicText.show{display:block; animation: pop .18s ease}
 </style>
 </head>
 
@@ -499,7 +598,7 @@
       <div class="logo" aria-hidden="true"></div>
       <div class="title">
         <h1>Digital Code Vault — Email Security</h1>
-        <p>Answer MCQs to reveal digits. If wrong, you get one recovery question. Reveal all digits to unlock the vault.</p>
+        <p>Correct answers reveal digits. A wrong answer gives one recovery (True/False). Reveal all digits to unlock the vault.</p>
       </div>
     </div>
 
@@ -517,17 +616,18 @@
       <div class="starfield"></div>
       <div class="boardInner">
         <div class="arena" id="arena">
+          <div class="gridFX"></div>
           <div class="scanLine"></div>
 
           <div class="topRow">
             <div class="kicker" id="kicker">
-              <b>Rule:</b> Each digit needs one correct answer. If you answer wrong, you get <b>one</b> recovery question (True/False).
+              <b>Rule:</b> One digit needs one correct answer. If you answer wrong, you get <b>one</b> recovery question (True/False).
             </div>
             <span class="kbd" id="nextHint">Press Start</span>
           </div>
 
           <div class="lockBoard">
-            <div class="digitsPanel">
+            <div class="digitsPanel" id="digitsPanel">
               <div class="digitsTitle">
                 <b>10-Digit Lock Code</b>
                 <small id="progressText">Digits Verified: 0 / 10</small>
@@ -545,8 +645,23 @@
             </div>
 
             <div class="vaultStage" id="vaultStage">
-              <div class="lockGlow" id="lockGlow"></div>
+              <div class="lockGlow"></div>
+
+              <div class="ringsFX" aria-hidden="true">
+                <svg viewBox="0 0 640 300" preserveAspectRatio="none">
+                  <g class="spinSlow">
+                    <circle cx="320" cy="165" r="118" fill="none" stroke="rgba(85,214,255,.16)" stroke-width="2"/>
+                    <circle cx="320" cy="165" r="92" fill="none" stroke="rgba(85,214,255,.10)" stroke-width="2"/>
+                  </g>
+                  <g class="spinFast">
+                    <circle cx="320" cy="165" r="76" fill="none" stroke="rgba(46,229,157,.10)" stroke-width="2"/>
+                    <circle cx="320" cy="165" r="58" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="2"/>
+                  </g>
+                </svg>
+              </div>
+
               <div class="lightBurst"></div>
+              <div class="rays"></div>
 
               <!-- Vault + Lock SVG -->
               <svg class="vaultSvg" viewBox="0 0 640 300" aria-label="Vault and lock illustration">
@@ -568,56 +683,53 @@
                   </radialGradient>
                 </defs>
 
-                <!-- Background ring -->
-                <circle cx="320" cy="150" r="120" fill="url(#vaultGlow)" opacity=".9"/>
+                <circle cx="320" cy="165" r="120" fill="url(#vaultGlow)" opacity=".9"/>
 
                 <!-- Vault frame -->
-                <rect x="170" y="78" width="300" height="170" rx="22" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.12)"/>
-                <rect x="188" y="94" width="264" height="138" rx="18" fill="rgba(0,0,0,.22)" stroke="rgba(255,255,255,.10)"/>
+                <rect x="160" y="70" width="320" height="190" rx="26" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.12)"/>
+                <rect x="180" y="90" width="280" height="150" rx="20" fill="rgba(0,0,0,.22)" stroke="rgba(255,255,255,.10)"/>
 
-                <!-- Doors (move apart on open) -->
+                <!-- Doors -->
                 <g id="doorL">
-                  <rect x="192" y="98" width="132" height="130" rx="14" fill="url(#door)" stroke="rgba(255,255,255,.10)"/>
-                  <circle cx="258" cy="163" r="18" fill="rgba(0,0,0,.30)" stroke="rgba(255,255,255,.10)"/>
-                  <circle cx="258" cy="163" r="6" fill="rgba(85,214,255,.45)"/>
+                  <rect x="184" y="94" width="140" height="142" rx="16" fill="url(#door)" stroke="rgba(255,255,255,.10)"/>
+                  <circle cx="254" cy="165" r="19" fill="rgba(0,0,0,.30)" stroke="rgba(255,255,255,.10)"/>
+                  <circle cx="254" cy="165" r="6" fill="rgba(85,214,255,.45)"/>
+                  <path d="M210 120h88" stroke="rgba(255,255,255,.08)" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M210 140h88" stroke="rgba(255,255,255,.06)" stroke-width="3" stroke-linecap="round"/>
                 </g>
 
                 <g id="doorR">
-                  <rect x="316" y="98" width="132" height="130" rx="14" fill="url(#door)" stroke="rgba(255,255,255,.10)"/>
-                  <circle cx="382" cy="163" r="18" fill="rgba(0,0,0,.30)" stroke="rgba(255,255,255,.10)"/>
-                  <circle cx="382" cy="163" r="6" fill="rgba(85,214,255,.45)"/>
+                  <rect x="316" y="94" width="140" height="142" rx="16" fill="url(#door)" stroke="rgba(255,255,255,.10)"/>
+                  <circle cx="386" cy="165" r="19" fill="rgba(0,0,0,.30)" stroke="rgba(255,255,255,.10)"/>
+                  <circle cx="386" cy="165" r="6" fill="rgba(85,214,255,.45)"/>
+                  <path d="M342 120h88" stroke="rgba(255,255,255,.08)" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M342 140h88" stroke="rgba(255,255,255,.06)" stroke-width="3" stroke-linecap="round"/>
                 </g>
 
                 <!-- Lock in front -->
-                <g transform="translate(0,0)">
-                  <!-- outer glow circle -->
-                  <circle cx="320" cy="170" r="82" fill="rgba(85,214,255,.10)" stroke="rgba(85,214,255,.14)"/>
+                <g>
+                  <circle cx="320" cy="186" r="88" fill="rgba(85,214,255,.08)" stroke="rgba(85,214,255,.14)"/>
 
-                  <!-- shackle (moves up on open) -->
-                  <path id="shackle" d="M280 168v-32c0-24 16-40 40-40s40 16 40 40v32"
+                  <path id="shackle" d="M280 184v-34c0-26 16-42 40-42s40 16 40 42v34"
                         fill="none" stroke="url(#steel)" stroke-width="12" stroke-linecap="round"/>
 
-                  <!-- body -->
-                  <path d="M258 168h124c12 0 22 10 22 22v48c0 26-20 46-46 46h-76c-26 0-46-20-46-46v-48c0-12 10-22 22-22z"
+                  <path id="lockBody" d="M256 184h128c12 0 22 10 22 22v50c0 26-20 46-46 46h-80c-26 0-46-20-46-46v-50c0-12 10-22 22-22z"
                         fill="url(#door)" stroke="rgba(255,255,255,.14)" stroke-width="2"/>
 
-                  <!-- keyhole plate -->
-                  <circle cx="320" cy="214" r="34" fill="rgba(0,0,0,.25)" stroke="rgba(85,214,255,.18)" stroke-width="2"/>
-                  <path d="M320 200c-8 0-14 6-14 14 0 5 3 10 8 12v20c0 3 2 5 6 5s6-2 6-5v-20c5-2 8-7 8-12 0-8-6-14-14-14z"
-                        fill="rgba(85,214,255,.85)"/>
+                  <circle cx="320" cy="232" r="34" fill="rgba(0,0,0,.25)" stroke="rgba(85,214,255,.18)" stroke-width="2"/>
+                  <path id="keyhole" d="M320 218c-8 0-14 6-14 14 0 5 3 10 8 12v20c0 3 2 5 6 5s6-2 6-5v-20c5-2 8-7 8-12 0-8-6-14-14-14z"
+                        fill="rgba(85,214,255,.86)"/>
                 </g>
-
-                <!-- Small bolts -->
-                <circle cx="188" cy="94" r="4" fill="rgba(255,255,255,.25)"/>
-                <circle cx="452" cy="94" r="4" fill="rgba(255,255,255,.25)"/>
-                <circle cx="188" cy="232" r="4" fill="rgba(255,255,255,.25)"/>
-                <circle cx="452" cy="232" r="4" fill="rgba(255,255,255,.25)"/>
               </svg>
 
+              <canvas class="sparks" id="sparks"></canvas>
               <canvas class="confetti" id="confetti"></canvas>
+
+              <div class="cinematicText" id="cinematicText">VERIFYING ACCESS…</div>
+
               <div class="finalBanner" id="finalBanner">
                 ACCESS GRANTED — VAULT OPENED
-                <small id="finalSub">Code verified successfully.</small>
+                <small id="finalSub">All digits verified.</small>
               </div>
             </div>
           </div>
@@ -629,7 +741,7 @@
     <aside class="side">
       <div class="sideInner">
         <h2>Session Summary</h2>
-        <p>Logs are clean: digit-by-digit progress, recovery usage, and time-to-complete.</p>
+        <p>Simple mechanics, strong visuals, and clean learning analytics.</p>
 
         <div class="stats">
           <div class="stat"><b id="acc">0%</b><span>Accuracy</span></div>
@@ -674,215 +786,175 @@
 
 <script>
 /* ============================================================
-   Email Security MCQs (built from the uploaded chapter content)
-   Key verified facts included:
-   - Spam warning signs (unknown sender, misspellings like p0rn, offers too good, mismatch subject/content, urgent offer end date, request to forward, virus warning, attachments incl .exe)
-   - Enigmail + GnuPG add OpenPGP to Thunderbird
-   - GnuPG protects only content and attachments you encrypt
-   - Never encrypted: Subject line, sender email, recipients email, real names
-   - Inline PGP vs PGP/MIME: inline leaves attachment filenames unencrypted; chapter advises always use PGP/MIME
+   Question Bank — framed naturally (no "chapter says" wording)
+   Topics included:
+   - Spam / scam warning signs
+   - Encryption limits (metadata not encrypted)
+   - OpenPGP in Thunderbird (Enigmail + GnuPG)
+   - Inline PGP vs PGP/MIME
 ============================================================ */
 
+/* Recovery format: True/False
+   Convention: 0 = True, 1 = False
+*/
 const QUESTION_BANK = [
-  // SPAM / Scam section
   {
-    q: "Which is a warning sign of spam mentioned in the chapter?",
+    q: "You receive an email from an unknown sender offering a “limited-time” discount. What is the safest interpretation?",
     choices: [
-      "You don’t know the sender",
-      "The email is always digitally signed",
-      "The email only contains plain text",
-      "The email is sent from your own domain"
-    ],
-    answerIndex: 0,
-    feedbackCorrect: "Correct: Unknown sender is listed as a spam warning sign.",
-    feedbackWrong: "Incorrect: The chapter lists unknown sender as a spam warning sign.",
-    recovery: { q: "True/False: A message from an unknown sender can be a spam warning sign.", answerIndex: 0 }
-  },
-  {
-    q: "The chapter notes spam may use misspellings like “p0rn” mainly to:",
-    choices: [
-      "Improve grammar",
-      "Fool spam filters",
-      "Encrypt the subject line",
-      "Increase attachment size"
+      "This is a normal marketing email and safe to act on",
+      "It is a warning sign and should be treated cautiously",
+      "It is guaranteed to be legitimate if it uses a logo",
+      "It is safe if it has no attachments"
     ],
     answerIndex: 1,
-    feedbackCorrect: "Correct: Misspellings are used to fool spam filters.",
-    feedbackWrong: "Incorrect: The purpose is to fool spam filters.",
-    recovery: { q: "True/False: Misspellings like “p0rn” can be used to fool spam filters.", answerIndex: 0 }
+    feedbackCorrect: "Correct: Unknown sender + urgency is a common warning pattern.",
+    feedbackWrong: "Not quite. Unknown sender and urgent offers are strong warning signs.",
+    recovery: { q: "True/False: An unknown sender with an urgent offer can be a warning sign.", answerIndex: 0 }
   },
   {
-    q: "Which spam sign is explicitly mentioned in the chapter?",
+    q: "Some spam emails use odd spellings (example: swapping letters with numbers). Why is that done?",
     choices: [
-      "The subject line and contents do not match",
-      "The email uses a strong passphrase",
-      "The email is always short",
-      "The email contains no links"
+      "To reduce the email size",
+      "To bypass keyword-based spam filters",
+      "To encrypt the message automatically",
+      "To make the email load faster"
+    ],
+    answerIndex: 1,
+    feedbackCorrect: "Correct: Misspellings are often used to evade spam filtering.",
+    feedbackWrong: "Not quite. Such spellings are commonly used to evade spam filters.",
+    recovery: { q: "True/False: Misspellings can be used to bypass basic spam filtering.", answerIndex: 0 }
+  },
+  {
+    q: "Which situation is a clear red flag in email reading?",
+    choices: [
+      "The subject and the email content do not match",
+      "The email has a polite greeting",
+      "The email is sent during office hours",
+      "The email uses simple language"
     ],
     answerIndex: 0,
-    feedbackCorrect: "Correct: Subject line/content mismatch is listed as a warning sign.",
-    feedbackWrong: "Incorrect: The chapter lists subject/content mismatch as a warning sign.",
-    recovery: { q: "True/False: A mismatch between subject and content is a spam warning sign.", answerIndex: 0 }
+    feedbackCorrect: "Correct: Subject-content mismatch is a strong warning sign.",
+    feedbackWrong: "Not quite. Subject-content mismatch is a strong warning sign.",
+    recovery: { q: "True/False: If the subject and content do not match, it can be suspicious.", answerIndex: 0 }
   },
   {
-    q: "The chapter lists which of these as a spam warning sign?",
+    q: "An email asks you to forward it to many people and promises a reward. What should you do?",
     choices: [
-      "An urgent offer end date (e.g., “Buy now and get 50% off”)",
-      "A verified invoice number",
-      "A personal greeting from your known contact",
-      "A message with no subject line"
+      "Forward it quickly to qualify for the reward",
+      "Treat it as suspicious and avoid forwarding",
+      "Reply asking for proof",
+      "Click links to confirm it is real"
     ],
-    answerIndex: 0,
-    feedbackCorrect: "Correct: Urgent offer end dates are listed as a spam warning sign.",
-    feedbackWrong: "Incorrect: Urgent offer end dates are listed as spam warning signs.",
-    recovery: { q: "True/False: Spam may include an urgent offer end date.", answerIndex: 0 }
+    answerIndex: 1,
+    feedbackCorrect: "Correct: Forwarding chains and reward promises are common scam patterns.",
+    feedbackWrong: "Not quite. Forwarding chains and reward promises are common scam patterns.",
+    recovery: { q: "True/False: Requests to forward a message widely can be suspicious.", answerIndex: 0 }
   },
   {
-    q: "A spam email may contain a request to:",
-    choices: [
-      "Forward the email to multiple people (sometimes offering money)",
-      "Verify the GnuPG fingerprint",
-      "Create a revocation certificate immediately",
-      "Disable PGP/MIME permanently"
-    ],
-    answerIndex: 0,
-    feedbackCorrect: "Correct: The chapter mentions requests to forward emails to multiple people.",
-    feedbackWrong: "Incorrect: The chapter mentions requests to forward emails to multiple people.",
-    recovery: { q: "True/False: Spam may request you to forward an email to many people.", answerIndex: 0 }
-  },
-  {
-    q: "The chapter notes spam may include attachments that could include:",
+    q: "Which attachment type is often risky if unexpected?",
     choices: [
       ".exe",
-      ".txt only",
-      ".jpg only",
-      ".pdf only"
+      ".txt",
+      ".jpg",
+      ".pdf"
     ],
     answerIndex: 0,
-    feedbackCorrect: "Correct: .exe is explicitly mentioned as a possible risky attachment type.",
-    feedbackWrong: "Incorrect: The chapter explicitly mentions .exe as a possible attachment type.",
-    recovery: { q: "True/False: Spam emails may contain attachments including .exe files.", answerIndex: 0 }
+    feedbackCorrect: "Correct: Unexpected executable files are risky.",
+    feedbackWrong: "Not quite. Unexpected executable files are risky.",
+    recovery: { q: "True/False: Unexpected .exe attachments are risky.", answerIndex: 0 }
   },
-
-  // Thunderbird + OpenPGP section
   {
-    q: "According to the chapter, Enigmail and GnuPG improve security by adding support for:",
+    q: "In Thunderbird, what combination is commonly used to enable OpenPGP email encryption features?",
     choices: [
-      "OpenPGP end-to-end encryption in Thunderbird",
-      "Automatic spam deletion on the server",
-      "Faster internet speed",
-      "Unlimited email storage"
+      "Enigmail + GnuPG",
+      "IMAP + POP",
+      "HTML + CSS",
+      "VPN + Proxy"
     ],
     answerIndex: 0,
-    feedbackCorrect: "Correct: They add OpenPGP end-to-end encryption support to Thunderbird.",
-    feedbackWrong: "Incorrect: The chapter says Enigmail + GnuPG add OpenPGP support to Thunderbird.",
-    recovery: { q: "True/False: Enigmail and GnuPG add OpenPGP end-to-end encryption support to Thunderbird.", answerIndex: 0 }
+    feedbackCorrect: "Correct: This combination enables OpenPGP features in the client setup.",
+    feedbackWrong: "Not quite. Enigmail with GnuPG enables OpenPGP features.",
+    recovery: { q: "True/False: Enigmail and GnuPG are used together for OpenPGP features.", answerIndex: 0 }
   },
   {
-    q: "The chapter states GnuPG only protects the:",
+    q: "With OpenPGP encryption, which part is still visible to email systems (not protected as message content)?",
     choices: [
-      "Subject line and sender address",
-      "Content of email and attachments you encrypt",
-      "Network routing headers",
-      "Time stamps stored by mail servers"
-    ],
-    answerIndex: 1,
-    feedbackCorrect: "Correct: GnuPG protects the content and the attachments you encrypt.",
-    feedbackWrong: "Incorrect: GnuPG protects the content and the attachments you encrypt.",
-    recovery: { q: "True/False: GnuPG only protects the content of email and attachments you encrypt.", answerIndex: 0 }
-  },
-  {
-    q: "Which information is never encrypted (as listed in the chapter)?",
-    choices: [
-      "The Subject line",
-      "The encrypted body content",
-      "Attachments you encrypt",
-      "A copy encrypted to your public key in Sent mail"
+      "Subject line",
+      "Encrypted message body",
+      "Encrypted attachment content",
+      "Encrypted signature content"
     ],
     answerIndex: 0,
-    feedbackCorrect: "Correct: The chapter lists the Subject line as never encrypted.",
-    feedbackWrong: "Incorrect: The chapter lists the Subject line as never encrypted.",
-    recovery: { q: "True/False: The Subject line is never encrypted according to the chapter.", answerIndex: 0 }
+    feedbackCorrect: "Correct: The subject line remains visible.",
+    feedbackWrong: "Not quite. The subject line remains visible.",
+    recovery: { q: "True/False: The subject line is not protected like encrypted message content.", answerIndex: 0 }
   },
   {
-    q: "Which information is never encrypted (as listed in the chapter)?",
+    q: "Which item remains visible even when message content is encrypted?",
     choices: [
       "Recipients’ email addresses",
-      "Encrypted attachments",
-      "Encrypted message content",
-      "The passphrase itself"
+      "Encrypted message body",
+      "Encrypted attachment content",
+      "Your local copy in ‘Sent’"
     ],
     answerIndex: 0,
-    feedbackCorrect: "Correct: The chapter lists recipients’ email addresses as never encrypted.",
-    feedbackWrong: "Incorrect: The chapter lists recipients’ email addresses as never encrypted.",
-    recovery: { q: "True/False: Recipients’ email addresses are never encrypted, as per the chapter.", answerIndex: 0 }
+    feedbackCorrect: "Correct: Recipient addresses are visible as routing information.",
+    feedbackWrong: "Not quite. Recipient addresses remain visible as routing information.",
+    recovery: { q: "True/False: Recipient email addresses remain visible even if content is encrypted.", answerIndex: 0 }
   },
   {
-    q: "Which information is never encrypted (as listed in the chapter)?",
+    q: "If you use Inline PGP instead of PGP/MIME, what is a known drawback for attachments?",
     choices: [
-      "The sender's email address",
-      "The encrypted message body",
-      "The OpenPGP-encrypted attachment content",
-      "The local Sent mail copy"
+      "Attachment file names may remain visible",
+      "The subject line becomes hidden",
+      "Recipients become hidden automatically",
+      "The message becomes unreadable to the sender"
     ],
     answerIndex: 0,
-    feedbackCorrect: "Correct: The chapter lists the sender's email address as never encrypted.",
-    feedbackWrong: "Incorrect: The chapter lists the sender's email address as never encrypted.",
-    recovery: { q: "True/False: The sender’s email address is never encrypted according to the chapter.", answerIndex: 0 }
+    feedbackCorrect: "Correct: Attachment file names can remain visible with Inline PGP.",
+    feedbackWrong: "Not quite. Attachment file names can remain visible with Inline PGP.",
+    recovery: { q: "True/False: With Inline PGP, attachment file names may remain visible.", answerIndex: 0 }
   },
   {
-    q: "The chapter also notes that real names associated with addresses are:",
+    q: "If some email details remain visible, what is a sensible habit when writing messages?",
     choices: [
-      "Always encrypted",
-      "Never encrypted",
-      "Encrypted only in POP accounts",
-      "Encrypted only with Inline PGP"
+      "Put confidential information in the subject line",
+      "Choose subject lines carefully and avoid sensitive details there",
+      "Always add your full address and ID number",
+      "Avoid encryption because it is unnecessary"
     ],
     answerIndex: 1,
-    feedbackCorrect: "Correct: The chapter lists associated real names as never encrypted.",
-    feedbackWrong: "Incorrect: The chapter lists associated real names as never encrypted.",
-    recovery: { q: "True/False: Real names associated with sender/recipient addresses are never encrypted (chapter).", answerIndex: 0 }
+    feedbackCorrect: "Correct: Avoid sensitive information in places that remain visible.",
+    feedbackWrong: "Not quite. Avoid sensitive information in subject lines and visible fields.",
+    recovery: { q: "True/False: It is wise to avoid sensitive details in the subject line.", answerIndex: 0 }
   },
 
-  // Inline PGP vs PGP/MIME section
+  /* Extra questions to reduce repetition during longer sessions */
   {
-    q: "If Enigmail is configured to use Inline PGP instead of PGP/MIME, the chapter warns that:",
+    q: "A message claims “Your computer is infected” and urges you to open an attachment. What is the safer response?",
     choices: [
-      "File names of attachments remain unencrypted",
-      "The subject line becomes encrypted automatically",
-      "Recipients’ addresses become encrypted",
-      "GnuPG stops working completely"
+      "Open the attachment to check",
+      "Treat it as suspicious and verify via trusted security tools/support",
+      "Forward it to friends for advice",
+      "Reply asking for the virus name"
     ],
-    answerIndex: 0,
-    feedbackCorrect: "Correct: Inline PGP leaves attachment file names unencrypted.",
-    feedbackWrong: "Incorrect: Inline PGP leaves attachment file names unencrypted.",
-    recovery: { q: "True/False: Inline PGP can leave attachment file names unencrypted.", answerIndex: 0 }
+    answerIndex: 1,
+    feedbackCorrect: "Correct: Threat-based urgency is common in scams; verify safely.",
+    feedbackWrong: "Not quite. Threat-based urgency is common; verify using trusted methods.",
+    recovery: { q: "True/False: “Urgent virus warnings” with attachments can be suspicious.", answerIndex: 0 }
   },
   {
-    q: "The chapter recommends you should always:",
+    q: "Which pair is always visible during email delivery (even if the message body is encrypted)?",
     choices: [
-      "Use PGP/MIME",
-      "Disable encryption on Sent mail",
-      "Use Inline PGP for attachments",
-      "Put sensitive data in the subject line"
+      "Sender address and recipients list",
+      "Encrypted body and encrypted attachments",
+      "Passphrase and private key",
+      "Local drafts and trash folder"
     ],
     answerIndex: 0,
-    feedbackCorrect: "Correct: The chapter explicitly advises always use PGP/MIME.",
-    feedbackWrong: "Incorrect: The chapter explicitly advises always use PGP/MIME.",
-    recovery: { q: "True/False: The chapter advises always using PGP/MIME.", answerIndex: 0 }
-  },
-  {
-    q: "Because some metadata is never encrypted, the chapter says it is important to:",
-    choices: [
-      "Choose subject lines carefully",
-      "Ignore subject lines completely",
-      "Always include your real name in the email account",
-      "Send attachments without encryption"
-    ],
-    answerIndex: 0,
-    feedbackCorrect: "Correct: The chapter highlights careful subject line choice.",
-    feedbackWrong: "Incorrect: The chapter says choose subject lines carefully.",
-    recovery: { q: "True/False: The chapter suggests choosing subject lines carefully since some info is never encrypted.", answerIndex: 0 }
+    feedbackCorrect: "Correct: Sender/recipient addressing is necessary for routing.",
+    feedbackWrong: "Not quite. Sender/recipient addressing is necessary for routing.",
+    recovery: { q: "True/False: Sender and recipient addressing is visible for routing.", answerIndex: 0 }
   }
 ];
 
@@ -904,11 +976,13 @@ let state = {
 
   streak: 0,
 
-  currentQuestion: null, // {mode:'main'|'recovery', digitIndex, qObj, mainAnsweredWrong:boolean}
+  currentQuestion: null, // {mode:'main'|'recovery', digitIndex, qObj}
   muted: false,
 
   usedQ: [],
-  startTime: Date.now()
+  startTime: Date.now(),
+
+  finishing: false
 };
 
 /* ============================================================
@@ -919,20 +993,20 @@ function beep(type){
   const ctx = beep.ctx || (beep.ctx = new (window.AudioContext || window.webkitAudioContext)());
   const o = ctx.createOscillator();
   const g = ctx.createGain();
-  o.type = "sine";
   const now = ctx.currentTime;
 
   const presets = {
-    click: [420, 0.035],
-    good:  [720, 0.085],
-    bad:   [170, 0.11],
-    win:   [540, 0.14]
+    click: [420, 0.035, "sine"],
+    good:  [760, 0.09, "triangle"],
+    bad:   [170, 0.11, "sawtooth"],
+    win:   [540, 0.16, "sine"]
   };
-  const [freq, dur] = presets[type] || presets.click;
+  const [freq, dur, wave] = presets[type] || presets.click;
 
+  o.type = wave;
   o.frequency.setValueAtTime(freq, now);
   g.gain.setValueAtTime(0.0001, now);
-  g.gain.exponentialRampToValueAtTime(0.15, now + 0.01);
+  g.gain.exponentialRampToValueAtTime(0.16, now + 0.01);
   g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
 
   o.connect(g); g.connect(ctx.destination);
@@ -954,6 +1028,7 @@ const nextBtn = el("nextBtn");
 const closeBtn = el("closeBtn");
 const toast = el("toast");
 const modeBadge = el("modeBadge");
+const digitsPanel = el("digitsPanel");
 
 function showToast(msg){
   toast.textContent = msg;
@@ -979,11 +1054,9 @@ function shuffle(arr){
   }
   return arr;
 }
-
 function resetQuestionDeck(){
   state.usedQ = shuffle([...Array(QUESTION_BANK.length).keys()]);
 }
-
 function nextMainQuestion(){
   if(state.usedQ.length === 0) resetQuestionDeck();
   const idx = state.usedQ.pop();
@@ -1008,12 +1081,11 @@ function renderDigits(){
     box.appendChild(d);
   }
 }
-
 function popDigit(i){
   const digitEl = el("digits").children[i];
   if(!digitEl) return;
   digitEl.classList.add("revealPop");
-  setTimeout(()=>digitEl.classList.remove("revealPop"), 420);
+  setTimeout(()=>digitEl.classList.remove("revealPop"), 520);
 }
 
 /* ============================================================
@@ -1090,11 +1162,9 @@ function openModal(mode, digitIndex, qObj){
   overlay.classList.add("show");
   beep("click");
 }
-
 function closeModal(){
   overlay.classList.remove("show");
 }
-
 closeBtn.addEventListener("click", ()=>{beep("click"); closeModal();});
 overlay.addEventListener("click", (e)=>{
   if(e.target === overlay){beep("click"); closeModal();}
@@ -1104,12 +1174,8 @@ nextBtn.addEventListener("click", ()=>{
   beep("click");
   closeModal();
 
-  // Continue automatically if not finished
   if(state.revealedCount < DIGITS_TOTAL){
-    // Small delay so the learner sees the digit reveal
-    setTimeout(()=> askNextDigit(), 260);
-  }else{
-    // Completed already — do nothing; animation handles.
+    setTimeout(()=> askNextDigit(), 320);
   }
 });
 
@@ -1149,12 +1215,14 @@ function answerMain(chosenIndex){
     modeBadge.className = "badge bad";
     beep("bad");
 
-    // After brief pause show recovery
+    // subtle shake on wrong (more dramatic)
+    const a = el("arena");
+    a.classList.remove("shake"); void a.offsetWidth; a.classList.add("shake");
+
     setTimeout(()=>{
       openModal("recovery", digitIndex, qObj);
-    }, 650);
+    }, 680);
 
-    // Keep next disabled for now; recovery modal will manage it.
     nextBtn.disabled = true;
   }
 }
@@ -1172,55 +1240,53 @@ function answerRecovery(chosenIndex){
 
   if(correct){
     state.score += SCORE_RECOVERY_CORRECT;
-    state.correct += 1; // counts as correct for analytics
+    state.correct += 1;
     feedbackEl.textContent = "Recovered — digit verified.";
     modeBadge.className = "badge good";
     beep("good");
     revealDigit(digitIndex, false);
   }else{
     state.wrong += 1;
-    feedbackEl.textContent = "Recovery failed — digit remains locked.";
+    feedbackEl.textContent = "Recovery failed — digit remains locked. Continue to the next question.";
     modeBadge.className = "badge bad";
     beep("bad");
-    // Still move on to next digit attempt (same digit remains locked, but we advance)
-    // In this design, each digit is tied to one attempt cycle. To keep it fair,
-    // we do NOT retry the same digit; we proceed but the digit stays blurred.
-    // However, to ensure completion is possible, we allow extra questions after 10 attempts.
+
+    // sparks on fail to make it feel "techy"
+    fireSparks(false);
+
+    // do NOT reveal digit; keep going (extra questions will continue until all digits are revealed)
   }
 
   nextBtn.disabled = false;
 }
 
 /* ============================================================
-   Digit progression model (practical and MOOC-safe)
-   - Target is 10 revealed digits.
-   - Each "round" is tied to revealing the next unrevealed digit.
-   - If recovery fails, we simply do NOT increment revealedCount.
-   - Then we continue asking new questions until all 10 digits are revealed.
+   Progress model
+   - To keep completion realistic, we keep asking new questions until all 10 digits are revealed.
+   - Each time you reveal, it unlocks the next digit position.
 ============================================================ */
 function revealDigit(digitIndex, fromMain){
-  // Reveal the next unrevealed digit (digitIndex should match revealedCount)
   if(digitIndex !== state.revealedCount) return;
 
   state.revealedCount += 1;
   renderDigits();
   popDigit(digitIndex);
 
-  // Visual pulse
-  const arena = el("arena");
-  arena.classList.remove("unlockPulse");
-  void arena.offsetWidth;
-  arena.classList.add("unlockPulse");
+  // stronger visual hit
+  digitsPanel.classList.remove("unlockPulse");
+  void digitsPanel.offsetWidth;
+  digitsPanel.classList.add("unlockPulse");
 
-  // Confetti micro burst
+  // micro sparks + micro confetti
+  fireSparks(true);
   fireConfetti(false);
 
   showToast(fromMain ? "Digit revealed!" : "Digit recovered!");
   el("nextHint").textContent = "Next digit unlocked";
-  el("note").innerHTML = `<b>Status:</b> Digit ${state.revealedCount} verified. Continue to unlock the vault.`;
+  el("note").innerHTML = `<b>Status:</b> Digit ${state.revealedCount} verified. Keep going.`;
 
   if(state.revealedCount >= DIGITS_TOTAL){
-    finishVault();
+    finishVaultCinematic();
   }
 }
 
@@ -1228,10 +1294,10 @@ function revealDigit(digitIndex, fromMain){
    Game loop
 ============================================================ */
 function askNextDigit(){
-  if(!state.started) return;
+  if(!state.started || state.finishing) return;
 
   if(state.revealedCount >= DIGITS_TOTAL){
-    finishVault();
+    finishVaultCinematic();
     return;
   }
 
@@ -1254,6 +1320,7 @@ function startGame(){
 
 function resetGame(){
   state.started = false;
+  state.finishing = false;
   state.codeDigits = Array.from({length: DIGITS_TOTAL}, ()=> Math.floor(Math.random()*10));
   state.revealedCount = 0;
 
@@ -1272,7 +1339,9 @@ function resetGame(){
   // Reset visuals
   el("vaultStage").classList.remove("vaultDoorsOpen");
   el("finalBanner").classList.remove("show");
-  el("finalSub").textContent = "Code verified successfully.";
+  el("finalSub").textContent = "All digits verified.";
+  el("cinematicText").classList.remove("show");
+  el("digitsPanel").classList.remove("digitsAllGlow");
   el("startBtn").disabled = false;
   el("nextHint").textContent = "Press Start";
   el("note").innerHTML = "<b>Status:</b> Press <b>Start</b> to begin. You will answer one MCQ per digit.";
@@ -1281,56 +1350,97 @@ function resetGame(){
 }
 
 /* ============================================================
-   Finish animation (lock opens + vault opens)
+   Cinematic finish (more attractive)
+   Sequence:
+   1) digits glow
+   2) "verifying access" text
+   3) sparks burst
+   4) lock shackle lifts
+   5) doors slide open + rays
+   6) final banner + big confetti
 ============================================================ */
-function finishVault(){
-  // Prevent multiple triggers
-  if(el("vaultStage").classList.contains("vaultDoorsOpen")) return;
+function wait(ms){ return new Promise(r=>setTimeout(r, ms)); }
+
+async function finishVaultCinematic(){
+  if(state.finishing) return;
+  state.finishing = true;
 
   closeModal();
 
-  // Big confetti + animation
   const stage = el("vaultStage");
-  stage.classList.add("vaultDoorsOpen");
-  fireConfetti(true);
+  const cine = el("cinematicText");
+
+  // Step 1: glow digits
+  el("digitsPanel").classList.add("digitsAllGlow");
+  cine.textContent = "VERIFYING ACCESS…";
+  cine.classList.add("show");
   beep("win");
+  fireSparks(true);
+  await wait(520);
+
+  // Step 2: pulse twice
+  digitsPanel.classList.remove("unlockPulse"); void digitsPanel.offsetWidth; digitsPanel.classList.add("unlockPulse");
+  await wait(420);
+  digitsPanel.classList.remove("unlockPulse"); void digitsPanel.offsetWidth; digitsPanel.classList.add("unlockPulse");
+  await wait(520);
+
+  // Step 3: unlock moment + sparks
+  cine.textContent = "LOCK RELEASED";
+  fireSparks(true);
+  await wait(500);
+
+  // Step 4: doors open
+  cine.textContent = "OPENING VAULT…";
+  stage.classList.add("vaultDoorsOpen");
+  await wait(900);
+
+  // Step 5: big celebration
+  cine.classList.remove("show");
+  fireConfetti(true);
+  fireSparks(true);
 
   el("finalBanner").classList.add("show");
-  el("finalSub").textContent = "All 10 digits verified from Email Security concepts.";
+  el("finalSub").textContent = "Vault opened successfully.";
 
   el("note").innerHTML = "<b>Result:</b> Access granted. Vault opened successfully.";
   el("nextHint").textContent = "Vault opened";
 }
 
 /* ============================================================
-   Confetti
+   Confetti + Sparks
 ============================================================ */
 const confettiCanvas = el("confetti");
-const ctx2 = confettiCanvas.getContext("2d");
+const sparksCanvas = el("sparks");
+const confCtx = confettiCanvas.getContext("2d");
+const spCtx = sparksCanvas.getContext("2d");
 let confettiParticles = [];
+let sparkParticles = [];
 
-function resizeConfettiCanvas(){
-  const arena = el("vaultStage");
-  const r = arena.getBoundingClientRect();
-  confettiCanvas.width = Math.floor(r.width * devicePixelRatio);
-  confettiCanvas.height = Math.floor(r.height * devicePixelRatio);
-  confettiCanvas.style.width = r.width + "px";
-  confettiCanvas.style.height = r.height + "px";
+function resizeFX(){
+  const box = el("vaultStage").getBoundingClientRect();
+  const w = Math.floor(box.width * devicePixelRatio);
+  const h = Math.floor(box.height * devicePixelRatio);
+
+  [confettiCanvas, sparksCanvas].forEach(c=>{
+    c.width = w; c.height = h;
+    c.style.width = box.width + "px";
+    c.style.height = box.height + "px";
+  });
 }
-window.addEventListener("resize", resizeConfettiCanvas);
+window.addEventListener("resize", resizeFX);
 
 function fireConfetti(big){
-  resizeConfettiCanvas();
+  resizeFX();
   confettiCanvas.classList.add("show");
   setTimeout(()=>confettiCanvas.classList.remove("show"), 1200);
 
   const w = confettiCanvas.width, h = confettiCanvas.height;
-  const count = big ? 200 : 70;
+  const count = big ? 220 : 70;
 
   for(let i=0;i<count;i++){
     confettiParticles.push({
-      x: w*0.5 + (Math.random()-0.5)*w*0.30,
-      y: h*0.25 + (Math.random()-0.5)*h*0.10,
+      x: w*0.5 + (Math.random()-0.5)*w*0.32,
+      y: h*0.30 + (Math.random()-0.5)*h*0.10,
       vx: (Math.random()-0.5) * (big ? 8 : 5) * devicePixelRatio,
       vy: (Math.random()*6 + 4) * devicePixelRatio,
       r: (Math.random()*5 + 3) * devicePixelRatio,
@@ -1342,10 +1452,34 @@ function fireConfetti(big){
   }
 }
 
-function tickConfetti(){
-  const w = confettiCanvas.width, h = confettiCanvas.height;
-  ctx2.clearRect(0,0,w,h);
+function fireSparks(big){
+  resizeFX();
+  sparksCanvas.classList.add("show");
+  setTimeout(()=>sparksCanvas.classList.remove("show"), 900);
 
+  const w = sparksCanvas.width, h = sparksCanvas.height;
+  const count = big ? 90 : 40;
+
+  for(let i=0;i<count;i++){
+    const ang = Math.random()*Math.PI*2;
+    const spd = (Math.random()*(big?10:7) + 3) * devicePixelRatio;
+    sparkParticles.push({
+      x: w*0.5,
+      y: h*0.56,
+      vx: Math.cos(ang)*spd,
+      vy: Math.sin(ang)*spd - (Math.random()*2*devicePixelRatio),
+      life: 1,
+      fade: Math.random()*0.05 + 0.03,
+      r: (Math.random()*2.5 + 1.2) * devicePixelRatio
+    });
+  }
+}
+
+function tickFX(){
+  const w = confettiCanvas.width, h = confettiCanvas.height;
+
+  // confetti
+  confCtx.clearRect(0,0,w,h);
   confettiParticles.forEach(p=>{
     p.x += p.vx;
     p.y += p.vy;
@@ -1353,19 +1487,38 @@ function tickConfetti(){
     p.rot += p.vr;
     p.life -= p.fade;
 
-    ctx2.save();
-    ctx2.translate(p.x, p.y);
-    ctx2.rotate(p.rot);
-    ctx2.globalAlpha = clamp(p.life,0,1);
-    ctx2.fillStyle = `hsl(${Math.floor(Math.random()*360)}, 90%, 60%)`;
-    ctx2.fillRect(-p.r, -p.r*0.5, p.r*2, p.r);
-    ctx2.restore();
+    confCtx.save();
+    confCtx.translate(p.x, p.y);
+    confCtx.rotate(p.rot);
+    confCtx.globalAlpha = clamp(p.life,0,1);
+    confCtx.fillStyle = `hsl(${Math.floor(Math.random()*360)}, 90%, 60%)`;
+    confCtx.fillRect(-p.r, -p.r*0.5, p.r*2, p.r);
+    confCtx.restore();
   });
-
   confettiParticles = confettiParticles.filter(p=>p.life>0 && p.y < h + 80*devicePixelRatio);
-  requestAnimationFrame(tickConfetti);
+
+  // sparks
+  spCtx.clearRect(0,0,w,h);
+  sparkParticles.forEach(s=>{
+    s.x += s.vx;
+    s.y += s.vy;
+    s.vx *= 0.92;
+    s.vy *= 0.92;
+    s.life -= s.fade;
+
+    spCtx.save();
+    spCtx.globalAlpha = clamp(s.life,0,1);
+    spCtx.beginPath();
+    spCtx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+    spCtx.fillStyle = "rgba(247,211,106,0.95)";
+    spCtx.fill();
+    spCtx.restore();
+  });
+  sparkParticles = sparkParticles.filter(s=>s.life>0);
+
+  requestAnimationFrame(tickFX);
 }
-tickConfetti();
+tickFX();
 
 /* ============================================================
    Buttons
@@ -1381,8 +1534,11 @@ el("muteBtn").addEventListener("click", ()=>{
 /* ============================================================
    Init
 ============================================================ */
-resetGame();
-resizeConfettiCanvas();
+function init(){
+  resetGame();
+  resizeFX();
+}
+init();
 </script>
 </body>
 </html>
