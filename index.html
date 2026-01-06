@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Unlock-the-Vault — GBL Quiz</title>
+<style>
+  :root{
+    --bg0:#070A12;
+    --bg1:#0B1224;
+    --panel:#0E1A33;
+    --steel1:#B8C0CC;
+    --steel2:#6F7A8A;
+    --steel3:#2B3445;
+    --gold1:#F7D36A;
+    --gold2:#B8872B;
+    --ink:#EAF1FF;
+    --muted:#9FB0D0;
+    --good:#2EE59D;
+    --bad:#FF5A7A;
+    --accent:#4DA3FF;
+    --shadow: 0 18px 60px rgba(0,0,0,.55);
+    --radius: 18px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; color:var(--ink);
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    background:
+      radial-gradient(1200px 700px at 20% 10%, #14275a 0%, rgba(20,39,90,0) 60%),
+      radial-gradient(900px 600px at 80% 30%, #2a1b5f 0%, rgba(42,27,95,0) 55%),
+      linear-gradient(180deg, var(--bg0), var(--bg1));
+    min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    padding:18px;
+    overflow-x:hidden;
+  }
+  .wrap{width:min(1100px, 100%);}
+
+  header{
+    display:flex; gap:12px; align-items:center; justify-content:space-between;
+    margin-bottom:14px;
+  }
+  .brand{
+    display:flex; gap:12px; align-items:center;
+  }
+  .logo{
+    width:44px; height:44px; border-radius:14px;
+    background: radial-gradient(circle at 30% 25%, #7dd3fc, #2563eb 65%, #0b1533 100%);
+    box-shadow: 0 10px 30px rgba(77,163,255,.25);
+    position:relative;
+  }
+  .logo::after{
+    content:"";
+    position:absolute; inset:10px 12px 10px 12px;
+    border-radius:10px;
+    border:2px solid rgba(255,255,255,.35);
+    box-shadow: inset 0 0 0 2px rgba(0,0,0,.25);
+  }
+  .title h1{font-size:18px; margin:0; letter-spacing:.2px}
+  .title p{margin:2px 0 0; color:var(--muted); font-size:12.5px}
+
+  .actions{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+  .pill{
+    display:flex; gap:8px; align-items:center;
+    padding:10px 12px;
+    border-radius:999px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.10);
+    backdrop-filter: blur(8px);
+  }
+  .pill span{font-size:12.5px; color:var(--muted)}
+  .btn{
+    appearance:none; border:0; cursor:pointer;
+    padding:10px 12px;
+    border-radius:12px;
+    background: rgba(255,255,255,.08);
+    color:var(--ink);
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    transition: transform .12s ease, background .12s ease;
+  }
+  .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.10)}
+  .btn:active{transform: translateY(0px)}
+  .btn.primary{
+    background: linear-gradient(180deg, rgba(77,163,255,.95), rgba(37,99,235,.95));
+    border:1px solid rgba(255,255,255,.20);
+  }
+  .btn.primary:hover{filter: brightness(1.05)}
+  .btn.danger{
+    background: linear-gradient(180deg, rgba(255,90,122,.95), rgba(225,29,72,.95));
+    border:1px solid rgba(255,255,255,.18);
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns: 1.35fr .85fr;
+    gap:14px;
+  }
+  @media (max-width: 900px){
+    .grid{grid-template-columns: 1fr; }
+  }
+
+  /* Vault panel */
+  .vaultCard{
+    border-radius: var(--radius);
+    background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+    border: 1px solid rgba(255,255,255,.10);
+    box-shadow: var(--shadow);
+    overflow:hidden;
+    position:relative;
+  }
+  .vaultTopGlow{
+    position:absolute; inset:-40% -30% auto -30%;
+    height:60%;
+    background: radial-gradient(circle at 50% 60%, rgba(77,163,255,.25), rgba(77,163,255,0) 70%);
+    pointer-events:none;
+  }
+  .vaultStage{
+    padding:14px;
+  }
+  .vaultFrame{
+    border-radius: 16px;
+    background:
+      radial-gradient(900px 500px at 50% -20%, rgba(255,255,255,.14), rgba(255,255,255,0) 55%),
+      linear-gradient(180deg, rgba(16,28,56,.95), rgba(7,10,18,.95));
+    border: 1px solid rgba(255,255,255,.10);
+    padding:14px;
+    position:relative;
+  }
+
+  /* Decorative bolts */
+  .bolt{
+    width:9px;height:9px;border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, #fff, #9099a8 40%, #2b3445 80%);
+    box-shadow: inset 0 1px 2px rgba(255,255,255,.25), 0 2px 8px rgba(0,0,0,.4);
+    opacity:.95;
+    position:absolute;
+  }
+
+  .vaultDoor{
+    border-radius: 18px;
+    background:
+      radial-gradient(1200px 700px at 40% 0%, rgba(255,255,255,.14), rgba(255,255,255,0) 55%),
+      linear-gradient(180deg, #2a3447, #121a2a 55%, #0b1020);
+    border:1px solid rgba(255,255,255,.10);
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.35), inset 0 30px 90px rgba(255,255,255,.04);
+    padding:16px;
+    position:relative;
+    overflow:hidden;
+  }
+  .steelSheen{
+    position:absolute; inset:0;
+    background: linear-gradient(120deg, rgba(255,255,255,0) 35%, rgba(255,255,255,.10) 45%, rgba(255,255,255,0) 55%);
+    transform: translateX(-50%);
+    animation: sheen 4.5s ease-in-out infinite;
+    opacity:.35;
+    pointer-events:none;
+  }
+  @keyframes sheen{
+    0%, 35%{transform: translateX(-70%)}
+    60%{transform: translateX(70%)}
+    100%{transform: translateX(70%)}
+  }
+
+  .doorInner{
+    border-radius: 16px;
+    background:
+      radial-gradient(600px 400px at 50% 10%, rgba(255,255,255,.10), rgba(255,255,255,0) 60%),
+      linear-gradient(180deg, rgba(12,18,34,.8), rgba(12,18,34,.55));
+    border:1px solid rgba(255,255,255,.08);
+    padding:14px;
+  }
+
+  .lockRow{
+    display:grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap:10px;
+  }
+  @media (max-width: 520px){
+    .lockRow{grid-template-columns: repeat(3, 1fr);}
+  }
+
+  .lock{
+    border-radius: 14px;
+    padding:10px 10px 12px;
+    background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+    border: 1px solid rgba(255,255,255,.10);
+    position:relative;
+    cursor:pointer;
+    user-select:none;
+    transition: transform .12s ease, filter .12s ease;
+    min-height:96px;
+  }
+  .lock:hover{transform: translateY(-2px); filter: brightness(1.05)}
+  .lock:active{transform: translateY(0px)}
+  .lock.disabled{
+    cursor:not-allowed;
+    opacity:.55;
+    filter:saturate(.7);
+  }
+  .lockHeader{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:8px;
+    margin-bottom:8px;
+  }
+  .lockHeader small{color:var(--muted); font-size:11.5px}
+  .statusDot{
+    width:10px; height:10px; border-radius:50%;
+    background: rgba(255,255,255,.18);
+    box-shadow: 0 0 0 3px rgba(255,255,255,.05);
+  }
+  .statusDot.good{background: var(--good); box-shadow: 0 0 0 3px rgba(46,229,157,.12), 0 0 18px rgba(46,229,157,.25)}
+  .statusDot.bad{background: var(--bad); box-shadow: 0 0 0 3px rgba(255,90,122,.12), 0 0 18px rgba(255,90,122,.25)}
+  .lockIcon{
+    height:46px;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  /* SVG lock look */
+  .lockSvg{
+    width:44px; height:44px;
+    filter: drop-shadow(0 8px 16px rgba(0,0,0,.45));
+  }
+  .lockLabel{
+    text-align:center;
+    margin-top:6px;
+    font-weight:600;
+    font-size:12.5px;
+    letter-spacing:.2px;
+  }
+  .lockHint{
+    text-align:center;
+    font-size:11.5px;
+    color:var(--muted);
+    margin-top:3px;
+  }
+
+  .doorFooter{
+    margin-top:12px;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+  }
+  .meter{
+    display:flex; gap:8px; align-items:center;
+  }
+  .bar{
+    width:190px; height:10px; border-radius:999px;
+    background: rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.10);
+    overflow:hidden;
+  }
+  .bar > i{
+    display:block; height:100%; width:0%;
+    background: linear-gradient(90deg, rgba(46,229,157,.95), rgba(77,163,255,.95));
+    border-radius:999px;
+    transition: width .35s ease;
+  }
+  .meter small{color:var(--muted); font-size:12px}
+
+  /* Right panel */
+  .sideCard{
+    border-radius: var(--radius);
+    background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+    border: 1px solid rgba(255,255,255,.10);
+    box-shadow: var(--shadow);
+    overflow:hidden;
+  }
+  .sideHead{
+    padding:14px 14px 0;
+    display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+  }
+  .sideHead h2{
+    margin:0; font-size:15px;
+    letter-spacing:.2px;
+  }
+  .sideHead p{
+    margin:6px 0 0; color:var(--muted); font-size:12.5px; line-height:1.35;
+  }
+  .sideBody{padding:14px}
+  .statGrid{
+    display:grid; grid-template-columns: 1fr 1fr; gap:10px;
+  }
+  .stat{
+    border-radius: 14px;
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.10);
+    padding:10px;
+  }
+  .stat b{display:block; font-size:16px}
+  .stat span{display:block; color:var(--muted); font-size:12px; margin-top:2px}
+  .tip{
+    margin-top:12px;
+    border-radius:14px;
+    padding:10px;
+    background: rgba(77,163,255,.10);
+    border: 1px solid rgba(77,163,255,.20);
+    color: var(--ink);
+    font-size:12.5px;
+    line-height:1.35;
+  }
+
+  /* Modal MCQ */
+  .overlay{
+    position:fixed; inset:0;
+    background: rgba(0,0,0,.55);
+    display:none;
+    align-items:center; justify-content:center;
+    padding:16px;
+    z-index:50;
+  }
+  .overlay.show{display:flex}
+  .modal{
+    width:min(760px, 100%);
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(20,34,66,.96), rgba(10,14,24,.96));
+    border: 1px solid rgba(255,255,255,.12);
+    box-shadow: 0 30px 120px rgba(0,0,0,.65);
+    overflow:hidden;
+    position:relative;
+  }
+  .modal::before{
+    content:"";
+    position:absolute; inset:-60% -40% auto -40%;
+    height:65%;
+    background: radial-gradient(circle at 50% 60%, rgba(247,211,106,.22), rgba(247,211,106,0) 70%);
+    pointer-events:none;
+  }
+  .mHead{
+    padding:14px 14px 10px;
+    display:flex; justify-content:space-between; align-items:flex-start; gap:10px;
+    position:relative;
+  }
+  .mHead h3{margin:0; font-size:15.5px}
+  .mHead small{display:block; color:var(--muted); margin-top:4px}
+  .mBody{padding:0 14px 14px; position:relative;}
+  .qText{
+    margin:10px 0 12px;
+    font-size:15px;
+    line-height:1.4;
+  }
+  .choices{
+    display:grid; gap:10px;
+  }
+  .choice{
+    width:100%;
+    text-align:left;
+    padding:12px 12px;
+    border-radius:14px;
+    background: rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12);
+    color:var(--ink);
+    cursor:pointer;
+    transition: transform .10s ease, background .12s ease, border-color .12s ease;
+  }
+  .choice:hover{transform: translateY(-1px); background: rgba(255,255,255,.08)}
+  .choice:active{transform: translateY(0px)}
+  .choice[disabled]{cursor:not-allowed; opacity:.75}
+  .choice.good{
+    border-color: rgba(46,229,157,.45);
+    background: rgba(46,229,157,.12);
+  }
+  .choice.bad{
+    border-color: rgba(255,90,122,.45);
+    background: rgba(255,90,122,.10);
+  }
+
+  .mFoot{
+    display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;
+    padding:12px 14px 14px;
+    border-top:1px solid rgba(255,255,255,.08);
+    background: rgba(0,0,0,.12);
+    position:relative;
+  }
+
+  .toast{
+    position:fixed;
+    left:50%; top:18px; transform:translateX(-50%);
+    padding:10px 12px;
+    border-radius: 999px;
+    background: rgba(0,0,0,.55);
+    border: 1px solid rgba(255,255,255,.15);
+    color: var(--ink);
+    font-size: 12.5px;
+    display:none;
+    z-index:80;
+    backdrop-filter: blur(10px);
+  }
+  .toast.show{display:block; animation: pop .18s ease}
+  @keyframes pop{from{transform:translateX(-50%) scale(.95); opacity:.6} to{transform:translateX(-50%) scale(1); opacity:1}}
+
+  /* Vault opening celebration */
+  .confetti{
+    position:absolute; inset:0;
+    pointer-events:none;
+    opacity:0;
+  }
+  .confetti.show{opacity:1; animation: fadeOut 1.2s ease forwards}
+  @keyframes fadeOut{0%{opacity:1} 100%{opacity:0}}
+
+  /* Jam shake */
+  .shake{animation: shake .35s ease}
+  @keyframes shake{
+    0%{transform: translateX(0)}
+    25%{transform: translateX(-5px)}
+    50%{transform: translateX(5px)}
+    75%{transform: translateX(-4px)}
+    100%{transform: translateX(0)}
+  }
+
+  .mutedText{color:var(--muted)}
+  .kbd{
+    font-size:12px; color:var(--muted);
+    padding:6px 10px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.06);
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div class="title">
+          <h1>Unlock-the-Vault</h1>
+          <p>Answer correctly to open locks. One attempt per lock. Mobile friendly.</p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <div class="pill" title="Progress">
+          <span>Locks</span>
+          <b id="locksDone">0</b><span>/</span><b id="locksTotal">6</b>
+        </div>
+        <div class="pill" title="Score">
+          <span>Score</span>
+          <b id="score">0</b>
+        </div>
+        <button class="btn" id="muteBtn" type="button">🔊 Sound</button>
+        <button class="btn danger" id="resetBtn" type="button">Reset</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- Vault -->
+      <section class="vaultCard">
+        <div class="vaultTopGlow"></div>
+        <div class="vaultStage">
+          <div class="vaultFrame" id="vaultFrame">
+            <!-- bolts -->
+            <div class="bolt" style="left:12px; top:12px"></div>
+            <div class="bolt" style="right:12px; top:12px"></div>
+            <div class="bolt" style="left:12px; bottom:12px"></div>
+            <div class="bolt" style="right:12px; bottom:12px"></div>
+
+            <div class="vaultDoor" id="vaultDoor">
+              <div class="steelSheen"></div>
+
+              <canvas class="confetti" id="confetti"></canvas>
+
+              <div class="doorInner">
+                <div class="lockRow" id="lockRow"></div>
+
+                <div class="doorFooter">
+                  <div class="meter">
+                    <div class="bar" aria-label="Progress bar"><i id="progBar"></i></div>
+                    <small id="progText" class="mutedText">0% unlocked</small>
+                  </div>
+                  <span class="kbd">Tip: Tap a lock to attempt it</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Side -->
+      <aside class="sideCard">
+        <div class="sideHead">
+          <div>
+            <h2>Session Summary</h2>
+            <p>Designed for clean learning data: time, accuracy, and where learners drop.</p>
+          </div>
+        </div>
+        <div class="sideBody">
+          <div class="statGrid">
+            <div class="stat"><b id="stAcc">0%</b><span>Accuracy</span></div>
+            <div class="stat"><b id="stTime">0s</b><span>Time</span></div>
+            <div class="stat"><b id="stCorrect">0</b><span>Correct</span></div>
+            <div class="stat"><b id="stWrong">0</b><span>Wrong</span></div>
+          </div>
+
+          <div class="tip" id="tipBox">
+            <b>How it works:</b> Open locks in order. Each lock has one question. Correct answers open it. Wrong answers jam it permanently.
+          </div>
+
+          <div style="margin-top:12px; color:var(--muted); font-size:12.5px; line-height:1.45">
+            <b>Research note:</b> This format reduces attention shift to game mechanics and keeps interaction simple.
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- MCQ Modal -->
+  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Question modal">
+    <div class="modal" id="modal">
+      <div class="mHead">
+        <div>
+          <h3 id="mTitle">Lock 1</h3>
+          <small id="mSub">One attempt only</small>
+        </div>
+        <button class="btn" id="closeBtn" type="button">Close</button>
+      </div>
+      <div class="mBody">
+        <div class="qText" id="qText">Question text</div>
+        <div class="choices" id="choices"></div>
+      </div>
+      <div class="mFoot">
+        <div id="feedback" class="mutedText">Choose the best answer.</div>
+        <button class="btn primary" id="nextBtn" type="button" disabled>Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+/* ========= Demo Question Bank (replace with your chapter MCQs) ========= */
+const QUESTION_BANK = [
+  {
+    q: "Which of the following is the primary purpose of authentication?",
+    choices: ["To ensure confidentiality", "To verify identity", "To reduce latency", "To compress data"],
+    answerIndex: 1,
+    feedbackCorrect: "Correct: Authentication verifies identity.",
+    feedbackWrong: "Incorrect: Authentication is about verifying identity."
+  },
+  {
+    q: "A strong password policy mainly helps to mitigate which risk?",
+    choices: ["Denial-of-service", "Brute-force attacks", "Packet loss", "Hardware failure"],
+    answerIndex: 1,
+    feedbackCorrect: "Correct: Strong passwords reduce brute-force success.",
+    feedbackWrong: "Incorrect: Strong passwords primarily mitigate brute-force attempts."
+  },
+  {
+    q: "Encryption primarily provides which security property?",
+    choices: ["Availability", "Confidentiality", "Non-repudiation", "Scalability"],
+    answerIndex: 1,
+    feedbackCorrect: "Correct: Encryption protects confidentiality.",
+    feedbackWrong: "Incorrect: Encryption is mainly for confidentiality."
+  },
+  {
+    q: "Which is the safest practice for handling suspicious email links?",
+    choices: ["Click quickly to see where it goes", "Forward it to everyone", "Verify sender and avoid clicking", "Reply asking for details"],
+    answerIndex: 2,
+    feedbackCorrect: "Correct: Verify and avoid clicking suspicious links.",
+    feedbackWrong: "Incorrect: Best practice is to verify and avoid clicking."
+  },
+  {
+    q: "Multi-factor authentication (MFA) improves security because it:",
+    choices: ["Removes the need for passwords", "Adds an additional verification factor", "Encrypts all network traffic", "Prevents physical theft"],
+    answerIndex: 1,
+    feedbackCorrect: "Correct: MFA adds another factor beyond the password.",
+    feedbackWrong: "Incorrect: MFA adds an additional verification factor."
+  },
+  {
+    q: "Which action best supports availability in a critical system?",
+    choices: ["Single point of failure design", "Regular backups and redundancy", "Weak access control", "No monitoring"],
+    answerIndex: 1,
+    feedbackCorrect: "Correct: Redundancy and backups support availability.",
+    feedbackWrong: "Incorrect: Availability is supported by redundancy and backups."
+  }
+];
+
+/* ========= Settings ========= */
+const LOCK_COUNT = 6; // keep 3–6 for mobile comfort
+const SCORE_PER_CORRECT = 10;
+
+let state = {
+  locks: [], // {status:'locked'|'open'|'jam', questionIndex, attempted:boolean}
+  currentLock: null,
+  score: 0,
+  correct: 0,
+  wrong: 0,
+  startTime: Date.now(),
+  muted: false
+};
+
+/* ========= Minimal sound (tiny oscillator beeps, no external files) ========= */
+function beep(type){
+  if(state.muted) return;
+  const ctx = beep.ctx || (beep.ctx = new (window.AudioContext || window.webkitAudioContext)());
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.type = "sine";
+  const now = ctx.currentTime;
+
+  const presets = {
+    click: [420, 0.035],
+    good:  [660, 0.085],
+    bad:   [180, 0.11],
+    open:  [520, 0.14]
+  };
+  const [freq, dur] = presets[type] || presets.click;
+
+  o.frequency.setValueAtTime(freq, now);
+  g.gain.setValueAtTime(0.0001, now);
+  g.gain.exponentialRampToValueAtTime(0.15, now + 0.01);
+  g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+
+  o.connect(g); g.connect(ctx.destination);
+  o.start(now);
+  o.stop(now + dur + 0.02);
+}
+
+/* ========= UI Helpers ========= */
+const el = (id)=>document.getElementById(id);
+const lockRow = el("lockRow");
+const overlay = el("overlay");
+const modal = el("modal");
+const qText = el("qText");
+const choicesEl = el("choices");
+const mTitle = el("mTitle");
+const feedbackEl = el("feedback");
+const nextBtn = el("nextBtn");
+const closeBtn = el("closeBtn");
+const toast = el("toast");
+
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(()=>toast.classList.remove("show"), 900);
+}
+
+function clamp(n,min,max){ return Math.max(min, Math.min(max,n)); }
+
+function formatTime(sec){
+  sec = Math.max(0, Math.floor(sec));
+  if(sec < 60) return sec + "s";
+  const m = Math.floor(sec/60), s = sec%60;
+  return `${m}m ${String(s).padStart(2,"0")}s`;
+}
+
+/* ========= Vault Graphics: lock SVG ========= */
+function lockSVG(status){
+  const isOpen = status === "open";
+  const isJam = status === "jam";
+  const bodyFill = isOpen ? "url(#gGood)" : isJam ? "url(#gBad)" : "url(#gSteel)";
+  const shackleFill = isOpen ? "rgba(46,229,157,.9)" : isJam ? "rgba(255,90,122,.9)" : "rgba(240,244,255,.75)";
+  const keyFill = isOpen ? "rgba(10,14,24,.65)" : "rgba(10,14,24,.55)";
+
+  return `
+  <svg class="lockSvg" viewBox="0 0 64 64" aria-hidden="true">
+    <defs>
+      <linearGradient id="gSteel" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#E6EDF8"/>
+        <stop offset="0.45" stop-color="#9AA6B8"/>
+        <stop offset="1" stop-color="#3B465A"/>
+      </linearGradient>
+      <linearGradient id="gGood" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#88F7C8"/>
+        <stop offset="0.45" stop-color="#2EE59D"/>
+        <stop offset="1" stop-color="#0C5F43"/>
+      </linearGradient>
+      <linearGradient id="gBad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#FFB3C1"/>
+        <stop offset="0.45" stop-color="#FF5A7A"/>
+        <stop offset="1" stop-color="#7A1C35"/>
+      </linearGradient>
+    </defs>
+
+    <!-- Shackle -->
+    <path d="M20 28v-8c0-7 5-12 12-12s12 5 12 12v8"
+      fill="none" stroke="${shackleFill}" stroke-width="6" stroke-linecap="round"/>
+    <!-- Body -->
+    <rect x="14" y="26" rx="10" ry="10" width="36" height="30" fill="${bodyFill}" />
+    <rect x="14" y="26" rx="10" ry="10" width="36" height="30"
+      fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
+    <!-- Keyhole -->
+    <circle cx="32" cy="40" r="5.5" fill="${keyFill}"/>
+    <rect x="30.5" y="40" width="3" height="10" rx="1.2" fill="${keyFill}"/>
+    <!-- Highlight -->
+    <path d="M18 32c6-8 20-9 28-2" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="2" stroke-linecap="round"/>
+  </svg>`;
+}
+
+/* ========= State Init ========= */
+function init(){
+  state.score = 0;
+  state.correct = 0;
+  state.wrong = 0;
+  state.startTime = Date.now();
+  state.currentLock = null;
+
+  // Map first N questions; if fewer, loop (but better to provide enough)
+  state.locks = Array.from({length: LOCK_COUNT}, (_, i)=>({
+    status: "locked",
+    attempted: false,
+    questionIndex: i % QUESTION_BANK.length
+  }));
+
+  renderLocks();
+  updateHUD();
+  resizeConfettiCanvas();
+}
+window.addEventListener("resize", resizeConfettiCanvas);
+
+function renderLocks(){
+  lockRow.innerHTML = "";
+  state.locks.forEach((lk, idx)=>{
+    const canOpen = idx === nextPlayableLockIndex();
+    const lockedOut = !canOpen && lk.status === "locked";
+    const card = document.createElement("div");
+    card.className = "lock" + (lockedOut ? " disabled" : "");
+    card.setAttribute("role","button");
+    card.setAttribute("tabindex", lockedOut ? "-1" : "0");
+    card.dataset.idx = idx;
+
+    const dotClass = lk.status === "open" ? "statusDot good" :
+                     lk.status === "jam" ? "statusDot bad" : "statusDot";
+
+    const hint = lk.status === "open" ? "Opened" :
+                 lk.status === "jam" ? "Jammed" :
+                 canOpen ? "Tap to attempt" : "Locked (in order)";
+
+    card.innerHTML = `
+      <div class="lockHeader">
+        <small>Lock ${idx+1}</small>
+        <i class="${dotClass}" aria-hidden="true"></i>
+      </div>
+      <div class="lockIcon">${lockSVG(lk.status)}</div>
+      <div class="lockLabel">${lk.status === "open" ? "UNLOCKED" : lk.status === "jam" ? "JAMMED" : "SECURE"}</div>
+      <div class="lockHint">${hint}</div>
+    `;
+
+    card.addEventListener("click", ()=> onLockClick(idx));
+    card.addEventListener("keydown", (e)=>{
+      if(e.key === "Enter" || e.key === " "){ e.preventDefault(); onLockClick(idx); }
+    });
+
+    lockRow.appendChild(card);
+  });
+}
+
+function nextPlayableLockIndex(){
+  // first lock that is still "locked"
+  return state.locks.findIndex(lk => lk.status === "locked");
+}
+
+/* ========= Modal logic ========= */
+function onLockClick(idx){
+  const nextIdx = nextPlayableLockIndex();
+  if(idx !== nextIdx) { showToast("Open locks in order."); beep("click"); return; }
+  const lk = state.locks[idx];
+  if(lk.attempted){ showToast("Already attempted."); return; }
+  state.currentLock = idx;
+  openQuestion(idx);
+}
+
+function openQuestion(lockIdx){
+  const lk = state.locks[lockIdx];
+  const qObj = QUESTION_BANK[lk.questionIndex];
+
+  mTitle.textContent = `Lock ${lockIdx+1}`;
+  el("mSub").textContent = "One attempt only • choose carefully";
+  qText.textContent = qObj.q;
+
+  feedbackEl.textContent = "Choose the best answer.";
+  nextBtn.disabled = true;
+
+  choicesEl.innerHTML = "";
+  qObj.choices.forEach((ch, i)=>{
+    const b = document.createElement("button");
+    b.className = "choice";
+    b.type = "button";
+    b.textContent = ch;
+    b.addEventListener("click", ()=> answer(lockIdx, i));
+    choicesEl.appendChild(b);
+  });
+
+  overlay.classList.add("show");
+  beep("click");
+}
+
+function closeModal(){
+  overlay.classList.remove("show");
+  state.currentLock = null;
+}
+
+closeBtn.addEventListener("click", ()=> { beep("click"); closeModal(); });
+overlay.addEventListener("click", (e)=>{
+  if(e.target === overlay){ beep("click"); closeModal(); }
+});
+
+nextBtn.addEventListener("click", ()=>{
+  beep("click");
+  closeModal();
+  checkVaultCompletion();
+});
+
+function disableChoices(){
+  [...choicesEl.querySelectorAll(".choice")].forEach(x=>x.disabled = true);
+}
+
+function answer(lockIdx, chosenIndex){
+  const lk = state.locks[lockIdx];
+  if(lk.attempted) return;
+
+  lk.attempted = true;
+
+  const qObj = QUESTION_BANK[lk.questionIndex];
+  const correct = chosenIndex === qObj.answerIndex;
+
+  disableChoices();
+
+  // Color choices
+  const btns = [...choicesEl.querySelectorAll(".choice")];
+  btns.forEach((b, i)=>{
+    if(i === qObj.answerIndex) b.classList.add("good");
+    if(i === chosenIndex && !correct) b.classList.add("bad");
+  });
+
+  if(correct){
+    lk.status = "open";
+    state.score += SCORE_PER_CORRECT;
+    state.correct += 1;
+    feedbackEl.textContent = qObj.feedbackCorrect || "Correct.";
+    beep("good");
+    openLockFX(lockIdx);
+    showToast("Lock opened!");
+  }else{
+    lk.status = "jam";
+    state.wrong += 1;
+    feedbackEl.textContent = qObj.feedbackWrong || "Wrong.";
+    beep("bad");
+    jamLockFX();
+    showToast("Lock jammed!");
+  }
+
+  nextBtn.disabled = false;
+  renderLocks();
+  updateHUD();
+}
+
+function openLockFX(lockIdx){
+  // subtle confetti and a light door glow pulse
+  fireConfetti();
+  const door = el("vaultDoor");
+  door.animate([
+    {filter:"brightness(1)"},
+    {filter:"brightness(1.08)"},
+    {filter:"brightness(1)"}
+  ], {duration: 420, easing:"ease-out"});
+}
+
+function jamLockFX(){
+  const frame = el("vaultFrame");
+  frame.classList.remove("shake");
+  void frame.offsetWidth;
+  frame.classList.add("shake");
+}
+
+/* ========= Completion ========= */
+function checkVaultCompletion(){
+  const remaining = state.locks.filter(l=>l.status==="locked").length;
+  if(remaining === 0){
+    // Vault opens if all locks opened; if any jam, show “vault denied”
+    const anyJam = state.locks.some(l=>l.status==="jam");
+    if(anyJam){
+      showToast("Vault access denied (some locks jammed).");
+      el("tipBox").innerHTML = "<b>Result:</b> Access denied. Some locks were jammed. You can reset and try again.";
+      beep("bad");
+    }else{
+      showToast("Vault unlocked!");
+      el("tipBox").innerHTML = "<b>Result:</b> Vault unlocked successfully. Great job.";
+      beep("open");
+      fireConfetti(true);
+      vaultOpenAnimation();
+    }
+  }
+}
+
+function vaultOpenAnimation(){
+  const door = el("vaultDoor");
+  door.animate([
+    {transform:"translateY(0) scale(1)"},
+    {transform:"translateY(-2px) scale(1.01)"},
+    {transform:"translateY(0) scale(1)"}
+  ], {duration: 520, easing:"ease-out"});
+}
+
+/* ========= HUD ========= */
+function updateHUD(){
+  const done = state.locks.filter(l=>l.status!=="locked").length;
+  el("locksDone").textContent = String(done);
+  el("locksTotal").textContent = String(LOCK_COUNT);
+  el("score").textContent = String(state.score);
+
+  const attempted = state.correct + state.wrong;
+  const acc = attempted ? Math.round((state.correct/attempted)*100) : 0;
+  el("stAcc").textContent = acc + "%";
+  el("stCorrect").textContent = String(state.correct);
+  el("stWrong").textContent = String(state.wrong);
+
+  const sec = (Date.now() - state.startTime)/1000;
+  el("stTime").textContent = formatTime(sec);
+
+  const pct = Math.round((done/LOCK_COUNT)*100);
+  el("progBar").style.width = pct + "%";
+  el("progText").textContent = `${pct}% unlocked`;
+}
+setInterval(updateHUD, 500);
+
+/* ========= Confetti ========= */
+const confettiCanvas = el("confetti");
+const ctx2 = confettiCanvas.getContext("2d");
+let confettiParticles = [];
+
+function resizeConfettiCanvas(){
+  const door = el("vaultDoor");
+  const r = door.getBoundingClientRect();
+  confettiCanvas.width = Math.floor(r.width * devicePixelRatio);
+  confettiCanvas.height = Math.floor(r.height * devicePixelRatio);
+  confettiCanvas.style.width = r.width + "px";
+  confettiCanvas.style.height = r.height + "px";
+}
+
+function fireConfetti(big=false){
+  confettiCanvas.classList.add("show");
+  setTimeout(()=>confettiCanvas.classList.remove("show"), 1200);
+
+  const w = confettiCanvas.width, h = confettiCanvas.height;
+  const count = big ? 160 : 70;
+
+  for(let i=0;i<count;i++){
+    confettiParticles.push({
+      x: w*0.5 + (Math.random()-0.5)*w*0.25,
+      y: h*0.15 + (Math.random()-0.5)*h*0.08,
+      vx: (Math.random()-0.5) * (big ? 8 : 5) * devicePixelRatio,
+      vy: (Math.random()*6 + 4) * devicePixelRatio,
+      r: (Math.random()*5 + 3) * devicePixelRatio,
+      rot: Math.random()*Math.PI,
+      vr: (Math.random()-0.5)*0.25,
+      life: 1,
+      fade: Math.random()*0.02 + 0.012
+    });
+  }
+}
+function tickConfetti(){
+  const w = confettiCanvas.width, h = confettiCanvas.height;
+  ctx2.clearRect(0,0,w,h);
+  // do not set specific colors: use HSL without fixed palette (varies)
+  confettiParticles.forEach(p=>{
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.14 * devicePixelRatio;
+    p.rot += p.vr;
+    p.life -= p.fade;
+
+    ctx2.save();
+    ctx2.translate(p.x, p.y);
+    ctx2.rotate(p.rot);
+    ctx2.globalAlpha = clamp(p.life,0,1);
+    ctx2.fillStyle = `hsl(${Math.floor(Math.random()*360)}, 90%, 60%)`;
+    ctx2.fillRect(-p.r, -p.r*0.5, p.r*2, p.r);
+    ctx2.restore();
+  });
+  confettiParticles = confettiParticles.filter(p=>p.life>0 && p.y < h + 80*devicePixelRatio);
+  requestAnimationFrame(tickConfetti);
+}
+tickConfetti();
+
+/* ========= Buttons ========= */
+el("resetBtn").addEventListener("click", ()=>{
+  beep("click");
+  init();
+  showToast("Reset done.");
+  el("tipBox").innerHTML = "<b>How it works:</b> Open locks in order. Each lock has one question. Correct answers open it. Wrong answers jam it permanently.";
+});
+el("muteBtn").addEventListener("click", ()=>{
+  state.muted = !state.muted;
+  el("muteBtn").textContent = state.muted ? "🔇 Muted" : "🔊 Sound";
+  showToast(state.muted ? "Sound off" : "Sound on");
+});
+
+/* ========= Start ========= */
+init();
+</script>
+</body>
+</html>
