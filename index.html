@@ -3,15 +3,17 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Unlock-the-Vault (Keys & Cyber Lock) — Email Security</title>
+<title>Digital Code Vault — Email Security (MCQ + Recovery)</title>
 <style>
   :root{
     --bg0:#050816;
     --bg1:#070b1d;
-    --panel: rgba(255,255,255,.06);
-    --stroke: rgba(255,255,255,.12);
+
     --ink:#EAF1FF;
     --muted:#A9B6D7;
+
+    --panel: rgba(255,255,255,.06);
+    --stroke: rgba(255,255,255,.12);
 
     --cyan:#55D6FF;
     --cyan2:#2C7BFF;
@@ -25,6 +27,7 @@
     --shadow: 0 18px 70px rgba(0,0,0,.55);
     --r: 18px;
   }
+
   *{box-sizing:border-box}
   body{
     margin:0; color:var(--ink);
@@ -39,12 +42,14 @@
       linear-gradient(180deg, var(--bg0), var(--bg1));
     overflow-x:hidden;
   }
-  .wrap{width:min(1100px, 100%);}
+
+  .wrap{width:min(1120px, 100%);}
 
   header{
     display:flex; align-items:center; justify-content:space-between; gap:10px;
     margin-bottom:12px; flex-wrap:wrap;
   }
+
   .brand{display:flex; align-items:center; gap:10px;}
   .logo{
     width:44px;height:44px;border-radius:14px;
@@ -92,11 +97,9 @@
     grid-template-columns: 1.35fr .85fr;
     gap:14px;
   }
-  @media (max-width: 920px){
-    .grid{grid-template-columns: 1fr;}
-  }
+  @media (max-width: 920px){ .grid{grid-template-columns: 1fr;} }
 
-  /* ==== main board ==== */
+  /* ===== Main board ===== */
   .board{
     border-radius: var(--r);
     background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
@@ -123,7 +126,7 @@
   .arena{
     border-radius: 18px;
     background:
-      radial-gradient(900px 600px at 50% 35%, rgba(85,214,255,.18), rgba(85,214,255,0) 60%),
+      radial-gradient(900px 600px at 50% 30%, rgba(85,214,255,.18), rgba(85,214,255,0) 60%),
       linear-gradient(180deg, rgba(7,12,28,.92), rgba(5,8,18,.92));
     border:1px solid rgba(255,255,255,.10);
     padding:16px;
@@ -131,12 +134,6 @@
     overflow:hidden;
   }
 
-  /* radar rings */
-  .rings{
-    position:absolute; inset:0;
-    pointer-events:none;
-    opacity:.65;
-  }
   .scanLine{
     position:absolute;
     left:-40%;
@@ -155,120 +152,99 @@
     100%{transform: translateX(290%) skewX(-16deg)}
   }
 
-  /* center lock */
-  .center{
-    display:grid;
-    grid-template-columns: 1fr 330px 1fr;
-    gap:12px;
-    align-items:center;
+  .topRow{
+    display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    margin-bottom:12px;
   }
-  @media (max-width: 720px){
-    .center{grid-template-columns: 1fr;}
+  .kicker{
+    color:var(--muted);
+    font-size:12.5px;
+    line-height:1.35;
   }
-
-  .lockWrap{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:10px 0;
-    position:relative;
-  }
-
-  .lockGlow{
-    position:absolute;
-    width:280px;height:280px;border-radius:50%;
-    background: radial-gradient(circle at 50% 50%, rgba(85,214,255,.35), rgba(85,214,255,0) 65%);
-    filter: blur(0px);
-    pointer-events:none;
-  }
-
-  .lockSvg{
-    width:240px;
-    max-width: 70vw;
-    filter: drop-shadow(0 22px 35px rgba(0,0,0,.55));
-    z-index:1;
-  }
-
-  /* keys: desktop orbit */
-  .keysCol{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-  }
-  @media (max-width: 720px){
-    .keysCol{display:none;}
-  }
-
-  .keyBtn{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    padding:10px 12px;
-    border-radius: 16px;
-    background: rgba(255,255,255,.06);
+  .kbd{
+    font-size:12px; color:var(--muted);
+    padding:6px 10px;
+    border-radius:999px;
     border:1px solid rgba(255,255,255,.12);
-    cursor:pointer;
-    user-select:none;
-    transition: transform .12s ease, filter .12s ease, background .12s ease;
+    background: rgba(255,255,255,.06);
+  }
+
+  /* ===== Digital lock board ===== */
+  .lockBoard{
+    display:grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap:14px;
+    align-items:center;
+  }
+  @media (max-width: 820px){ .lockBoard{grid-template-columns: 1fr;} }
+
+  .digitsPanel{
+    border-radius: 18px;
+    background: rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.10);
+    padding:14px;
     position:relative;
     overflow:hidden;
   }
-  .keyBtn:hover{transform: translateY(-2px); filter: brightness(1.05)}
-  .keyBtn:active{transform: translateY(0)}
-  .keyBtn.disabled{opacity:.55; cursor:not-allowed; filter:saturate(.7)}
-  .keyLabel{display:flex; flex-direction:column; gap:2px;}
-  .keyLabel b{font-size:12.8px; letter-spacing:.2px}
-  .keyLabel small{color:var(--muted); font-size:11.8px}
-  .statusPip{
-    width:10px;height:10px;border-radius:50%;
-    background: rgba(255,255,255,.20);
-    box-shadow: 0 0 0 3px rgba(255,255,255,.06);
-  }
-  .statusPip.good{background: var(--good); box-shadow: 0 0 0 3px rgba(46,229,157,.12), 0 0 18px rgba(46,229,157,.22)}
-  .statusPip.bad{background: var(--bad); box-shadow: 0 0 0 3px rgba(255,90,122,.12), 0 0 18px rgba(255,90,122,.22)}
 
-  .keyIcon{
-    width:78px; height:26px;
-    filter: drop-shadow(0 10px 16px rgba(0,0,0,.45));
-  }
-
-  /* mobile key list */
-  .keysMobile{
-    display:none;
-    margin-top:12px;
-    gap:10px;
-  }
-  @media (max-width: 720px){
-    .keysMobile{display:grid;}
-    .keysMobile{grid-template-columns: repeat(2, 1fr);}
-  }
-  .keyCard{
-    border-radius: 16px;
-    padding:10px;
-    background: rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.12);
-    cursor:pointer;
-    transition: transform .12s ease, filter .12s ease;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-  }
-  .keyCard:hover{transform: translateY(-1px); filter: brightness(1.05)}
-  .keyCard:active{transform: translateY(0)}
-  .keyCard.disabled{opacity:.55; cursor:not-allowed; filter:saturate(.7)}
-  .keyCard b{font-size:12.5px}
-  .keyCard small{display:block;color:var(--muted);font-size:11.5px;margin-top:2px}
-
-  /* progress */
-  .footerRow{
-    margin-top:14px;
+  .digitsTitle{
     display:flex; align-items:center; justify-content:space-between;
     gap:10px; flex-wrap:wrap;
+    margin-bottom:10px;
+  }
+  .digitsTitle b{font-size:13px; letter-spacing:.2px}
+  .digitsTitle small{color:var(--muted); font-size:12px}
+
+  .digits{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+  .digit{
+    width:44px; height:52px;
+    border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px;
+    font-weight:800;
+    letter-spacing:.5px;
+    position:relative;
+    border:1px solid rgba(255,255,255,.12);
+    background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.30);
+  }
+  .digit .blur{
+    width:18px;height:18px;border-radius:50%;
+    background: rgba(255,255,255,.30);
+    filter: blur(6px);
+    opacity:.85;
+  }
+  .digit.revealed{
+    background:
+      radial-gradient(140px 60px at 50% 35%, rgba(85,214,255,.18), rgba(85,214,255,0) 60%),
+      linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+    border-color: rgba(85,214,255,.35);
+    box-shadow:
+      inset 0 0 0 1px rgba(0,0,0,.35),
+      0 0 24px rgba(85,214,255,.18);
+  }
+  .digit.revealed span{
+    color: rgba(234,241,255,.96);
+    text-shadow: 0 0 14px rgba(85,214,255,.35);
+  }
+  .digit.revealPop{ animation: revealPop .35s ease; }
+  @keyframes revealPop{
+    0%{transform: scale(.96); filter: brightness(.95)}
+    60%{transform: scale(1.03); filter: brightness(1.12)}
+    100%{transform: scale(1); filter: brightness(1)}
+  }
+
+  .progressRow{
+    margin-top:12px;
+    display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
   }
   .bar{
-    width:220px; height:10px; border-radius:999px;
+    width:240px; height:10px; border-radius:999px;
     background: rgba(255,255,255,.10);
     border:1px solid rgba(255,255,255,.10);
     overflow:hidden;
@@ -281,7 +257,77 @@
   }
   .hint{color:var(--muted); font-size:12.5px}
 
-  /* right panel */
+  /* ===== Lock + vault illustration (SVG + CSS animation) ===== */
+  .vaultStage{
+    border-radius: 18px;
+    background: rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.10);
+    padding:14px;
+    position:relative;
+    overflow:hidden;
+    min-height: 270px;
+  }
+  .vaultStage::before{
+    content:"";
+    position:absolute; inset:-40% -30% auto -30%;
+    height:60%;
+    background: radial-gradient(circle at 50% 60%, rgba(247,211,106,.16), rgba(247,211,106,0) 70%);
+    pointer-events:none;
+  }
+
+  .lockGlow{
+    position:absolute;
+    width:260px;height:260px;border-radius:50%;
+    left:50%; top:45%;
+    transform: translate(-50%,-50%);
+    background: radial-gradient(circle at 50% 50%, rgba(85,214,255,.35), rgba(85,214,255,0) 68%);
+    pointer-events:none;
+  }
+
+  .vaultSvg{
+    width:100%;
+    height:250px;
+    display:block;
+    filter: drop-shadow(0 18px 26px rgba(0,0,0,.55));
+    position:relative;
+    z-index:1;
+  }
+
+  .unlockPulse{ animation: unlockPulse .55s ease; }
+  @keyframes unlockPulse{
+    0%{filter: brightness(1)}
+    50%{filter: brightness(1.18)}
+    100%{filter: brightness(1)}
+  }
+
+  .shake{ animation: shake .35s ease; }
+  @keyframes shake{
+    0%{transform: translateX(0)}
+    25%{transform: translateX(-5px)}
+    50%{transform: translateX(5px)}
+    75%{transform: translateX(-4px)}
+    100%{transform: translateX(0)}
+  }
+
+  /* vault opening animation using CSS variables */
+  .vaultDoorsOpen #doorL{ transform: translateX(-84px); }
+  .vaultDoorsOpen #doorR{ transform: translateX(84px); }
+  .vaultDoorsOpen #shackle{ transform: translateY(-18px); }
+  #doorL, #doorR, #shackle{ transition: transform 1.05s ease; transform-origin:center; }
+
+  .lightBurst{
+    position:absolute;
+    inset:0;
+    background: radial-gradient(circle at 50% 55%, rgba(247,211,106,.28), rgba(247,211,106,0) 60%);
+    opacity:0;
+    pointer-events:none;
+  }
+  .vaultDoorsOpen .lightBurst{
+    opacity:1;
+    transition: opacity .9s ease;
+  }
+
+  /* ===== Right panel ===== */
   .side{
     border-radius: var(--r);
     background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
@@ -314,7 +360,7 @@
     font-size:12.5px; line-height:1.35;
   }
 
-  /* modal */
+  /* ===== Modal ===== */
   .overlay{
     position:fixed; inset:0;
     background: rgba(0,0,0,.58);
@@ -325,7 +371,7 @@
   }
   .overlay.show{display:flex}
   .modal{
-    width:min(780px, 100%);
+    width:min(820px, 100%);
     border-radius: 18px;
     background: linear-gradient(180deg, rgba(20,34,66,.96), rgba(9,12,22,.96));
     border: 1px solid rgba(255,255,255,.12);
@@ -337,7 +383,7 @@
     content:"";
     position:absolute; inset:-60% -40% auto -40%;
     height:65%;
-    background: radial-gradient(circle at 50% 60%, rgba(247,211,106,.20), rgba(247,211,106,0) 70%);
+    background: radial-gradient(circle at 50% 60%, rgba(247,211,106,.18), rgba(247,211,106,0) 70%);
     pointer-events:none;
   }
   .mHead{
@@ -347,11 +393,25 @@
   }
   .mHead h3{margin:0; font-size:15.5px}
   .mHead small{display:block; color:var(--muted); margin-top:4px}
+
+  .badge{
+    display:inline-flex; align-items:center; gap:8px;
+    margin-top:8px;
+    padding:6px 10px;
+    border-radius: 999px;
+    font-size:12px;
+    border:1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.06);
+    color: var(--muted);
+  }
+  .badge.good{border-color: rgba(46,229,157,.30); background: rgba(46,229,157,.10); color: rgba(234,241,255,.92);}
+  .badge.bad{border-color: rgba(255,90,122,.30); background: rgba(255,90,122,.10); color: rgba(234,241,255,.92);}
+
   .mBody{padding:0 14px 14px; position:relative;}
   .qText{
     margin:10px 0 12px;
     font-size:15px;
-    line-height:1.4;
+    line-height:1.45;
   }
   .choices{display:grid; gap:10px;}
   .choice{
@@ -367,7 +427,7 @@
   }
   .choice:hover{transform: translateY(-1px); background: rgba(255,255,255,.08)}
   .choice:active{transform: translateY(0px)}
-  .choice[disabled]{cursor:not-allowed; opacity:.78}
+  .choice[disabled]{cursor:not-allowed; opacity:.80}
   .choice.good{
     border-color: rgba(46,229,157,.45);
     background: rgba(46,229,157,.12);
@@ -383,6 +443,7 @@
     background: rgba(0,0,0,.12);
     position:relative;
   }
+
   .toast{
     position:fixed;
     left:50%; top:18px; transform:translateX(-50%);
@@ -399,22 +460,7 @@
   .toast.show{display:block; animation: pop .18s ease}
   @keyframes pop{from{transform:translateX(-50%) scale(.95); opacity:.6} to{transform:translateX(-50%) scale(1); opacity:1}}
 
-  /* effects */
-  .shake{animation: shake .35s ease}
-  @keyframes shake{
-    0%{transform: translateX(0)}
-    25%{transform: translateX(-5px)}
-    50%{transform: translateX(5px)}
-    75%{transform: translateX(-4px)}
-    100%{transform: translateX(0)}
-  }
-  .pulse{animation: pulse .45s ease}
-  @keyframes pulse{
-    0%{filter: brightness(1)}
-    50%{filter: brightness(1.15)}
-    100%{filter: brightness(1)}
-  }
-
+  /* Confetti */
   .confetti{
     position:absolute; inset:0;
     pointer-events:none;
@@ -423,30 +469,45 @@
   .confetti.show{opacity:1; animation: fadeOut 1.2s ease forwards}
   @keyframes fadeOut{0%{opacity:1} 100%{opacity:0}}
 
-  /* small helper */
-  .kbd{
-    font-size:12px; color:var(--muted);
-    padding:6px 10px;
-    border-radius:999px;
-    border:1px solid rgba(255,255,255,.12);
-    background: rgba(255,255,255,.06);
+  /* Final banner */
+  .finalBanner{
+    position:absolute;
+    left:50%; top:50%;
+    transform: translate(-50%,-50%);
+    padding:12px 14px;
+    border-radius: 16px;
+    background: rgba(0,0,0,.45);
+    border:1px solid rgba(255,255,255,.16);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 18px 60px rgba(0,0,0,.55);
+    font-weight:800;
+    letter-spacing:.3px;
+    display:none;
+    z-index:5;
+    text-align:center;
+    width:min(520px, 92%);
   }
+  .finalBanner.show{display:block; animation: pop .18s ease}
+  .finalBanner small{display:block; margin-top:6px; font-weight:600; color:var(--muted); font-size:12.5px}
 </style>
 </head>
+
 <body>
 <div class="wrap">
   <header>
     <div class="brand">
       <div class="logo" aria-hidden="true"></div>
       <div class="title">
-        <h1>Unlock-the-Vault — Email Security Keys</h1>
-        <p>Open keys in order. One attempt per key. Correct keys unlock the cyber lock.</p>
+        <h1>Digital Code Vault — Email Security</h1>
+        <p>Answer MCQs to reveal digits. If wrong, you get one recovery question. Reveal all digits to unlock the vault.</p>
       </div>
     </div>
+
     <div class="actions">
-      <div class="pill"><span>Keys</span><b id="done">0</b><span>/</span><b id="total">10</b></div>
+      <div class="pill"><span>Digits</span><b id="done">0</b><span>/</span><b id="total">10</b></div>
       <div class="pill"><span>Score</span><b id="score">0</b></div>
       <button class="btn" id="muteBtn" type="button">🔊 Sound</button>
+      <button class="btn primary" id="startBtn" type="button">Start</button>
       <button class="btn danger" id="resetBtn" type="button">Reset</button>
     </div>
   </header>
@@ -456,103 +517,111 @@
       <div class="starfield"></div>
       <div class="boardInner">
         <div class="arena" id="arena">
-          <svg class="rings" viewBox="0 0 1000 700" preserveAspectRatio="none" aria-hidden="true">
-            <defs>
-              <radialGradient id="rg" cx="50%" cy="50%" r="60%">
-                <stop offset="0%" stop-color="rgba(85,214,255,.25)"/>
-                <stop offset="60%" stop-color="rgba(85,214,255,.05)"/>
-                <stop offset="100%" stop-color="rgba(85,214,255,0)"/>
-              </radialGradient>
-            </defs>
-            <circle cx="500" cy="350" r="250" fill="none" stroke="rgba(85,214,255,.18)" stroke-width="2"/>
-            <circle cx="500" cy="350" r="190" fill="none" stroke="rgba(85,214,255,.14)" stroke-width="2"/>
-            <circle cx="500" cy="350" r="130" fill="none" stroke="rgba(85,214,255,.10)" stroke-width="2"/>
-            <circle cx="500" cy="350" r="290" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="2"/>
-            <circle cx="500" cy="350" r="330" fill="url(#rg)" opacity=".55"/>
-          </svg>
           <div class="scanLine"></div>
 
-          <div class="center">
-            <div class="keysCol" id="keysLeft"></div>
+          <div class="topRow">
+            <div class="kicker" id="kicker">
+              <b>Rule:</b> Each digit needs one correct answer. If you answer wrong, you get <b>one</b> recovery question (True/False).
+            </div>
+            <span class="kbd" id="nextHint">Press Start</span>
+          </div>
 
-            <div class="lockWrap">
+          <div class="lockBoard">
+            <div class="digitsPanel">
+              <div class="digitsTitle">
+                <b>10-Digit Lock Code</b>
+                <small id="progressText">Digits Verified: 0 / 10</small>
+              </div>
+
+              <div class="digits" id="digits"></div>
+
+              <div class="progressRow">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                  <div class="bar"><i id="barFill"></i></div>
+                  <span class="hint" id="barText">0% verified</span>
+                </div>
+                <span class="hint" id="streakText">Streak: 0</span>
+              </div>
+            </div>
+
+            <div class="vaultStage" id="vaultStage">
               <div class="lockGlow" id="lockGlow"></div>
+              <div class="lightBurst"></div>
 
-              <!-- Conceptual cyber lock (SVG) -->
-              <svg class="lockSvg" viewBox="0 0 260 300" aria-label="Cyber lock">
+              <!-- Vault + Lock SVG -->
+              <svg class="vaultSvg" viewBox="0 0 640 300" aria-label="Vault and lock illustration">
                 <defs>
                   <linearGradient id="steel" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0" stop-color="#E6EDF8"/>
                     <stop offset=".35" stop-color="#9AA6B8"/>
                     <stop offset="1" stop-color="#2B3445"/>
                   </linearGradient>
-                  <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient id="door" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0" stop-color="#1B2640"/>
                     <stop offset=".55" stop-color="#101a2f"/>
                     <stop offset="1" stop-color="#0a1020"/>
                   </linearGradient>
-                  <linearGradient id="neon" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0" stop-color="rgba(85,214,255,.9)"/>
-                    <stop offset="1" stop-color="rgba(46,229,157,.9)"/>
-                  </linearGradient>
-                  <radialGradient id="glow" cx="50%" cy="48%" r="60%">
-                    <stop offset="0" stop-color="rgba(85,214,255,.45)"/>
+                  <radialGradient id="vaultGlow" cx="50%" cy="55%" r="65%">
+                    <stop offset="0" stop-color="rgba(85,214,255,.35)"/>
                     <stop offset="70%" stop-color="rgba(85,214,255,.08)"/>
                     <stop offset="100%" stop-color="rgba(85,214,255,0)"/>
                   </radialGradient>
                 </defs>
 
-                <!-- outer glow -->
-                <circle cx="130" cy="165" r="120" fill="url(#glow)" opacity=".75"/>
+                <!-- Background ring -->
+                <circle cx="320" cy="150" r="120" fill="url(#vaultGlow)" opacity=".9"/>
 
-                <!-- shackle -->
-                <path d="M75 110V70c0-33 22-55 55-55s55 22 55 55v40"
-                      fill="none" stroke="url(#steel)" stroke-width="16" stroke-linecap="round"/>
-                <path d="M88 110V72c0-25 17-41 42-41s42 16 42 41v38"
-                      fill="none" stroke="rgba(255,255,255,.25)" stroke-width="4" stroke-linecap="round"/>
+                <!-- Vault frame -->
+                <rect x="170" y="78" width="300" height="170" rx="22" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.12)"/>
+                <rect x="188" y="94" width="264" height="138" rx="18" fill="rgba(0,0,0,.22)" stroke="rgba(255,255,255,.10)"/>
 
-                <!-- body -->
-                <path d="M45 110h170c14 0 25 11 25 25v105c0 30-24 55-55 55H75c-30 0-55-25-55-55V135c0-14 11-25 25-25z"
-                      fill="url(#body)" stroke="rgba(255,255,255,.14)" stroke-width="2"/>
+                <!-- Doors (move apart on open) -->
+                <g id="doorL">
+                  <rect x="192" y="98" width="132" height="130" rx="14" fill="url(#door)" stroke="rgba(255,255,255,.10)"/>
+                  <circle cx="258" cy="163" r="18" fill="rgba(0,0,0,.30)" stroke="rgba(255,255,255,.10)"/>
+                  <circle cx="258" cy="163" r="6" fill="rgba(85,214,255,.45)"/>
+                </g>
 
-                <!-- cyber panel lines -->
-                <rect x="62" y="148" width="136" height="14" rx="7" fill="rgba(85,214,255,.14)"/>
-                <rect x="62" y="170" width="136" height="14" rx="7" fill="rgba(85,214,255,.10)"/>
-                <rect x="62" y="192" width="136" height="14" rx="7" fill="rgba(85,214,255,.08)"/>
-                <rect x="62" y="214" width="136" height="14" rx="7" fill="rgba(46,229,157,.10)"/>
+                <g id="doorR">
+                  <rect x="316" y="98" width="132" height="130" rx="14" fill="url(#door)" stroke="rgba(255,255,255,.10)"/>
+                  <circle cx="382" cy="163" r="18" fill="rgba(0,0,0,.30)" stroke="rgba(255,255,255,.10)"/>
+                  <circle cx="382" cy="163" r="6" fill="rgba(85,214,255,.45)"/>
+                </g>
 
-                <!-- center keyhole plate -->
-                <circle cx="130" cy="205" r="48" fill="rgba(0,0,0,.25)" stroke="rgba(255,255,255,.10)" stroke-width="2"/>
-                <circle cx="130" cy="205" r="36" fill="rgba(10,14,24,.55)" stroke="rgba(85,214,255,.18)" stroke-width="2"/>
+                <!-- Lock in front -->
+                <g transform="translate(0,0)">
+                  <!-- outer glow circle -->
+                  <circle cx="320" cy="170" r="82" fill="rgba(85,214,255,.10)" stroke="rgba(85,214,255,.14)"/>
 
-                <!-- keyhole -->
-                <path d="M130 188c-10 0-18 8-18 18 0 7 4 13 10 16v28c0 4 3 7 8 7h0c5 0 8-3 8-7v-28c6-3 10-9 10-16 0-10-8-18-18-18z"
-                      fill="rgba(85,214,255,.85)"/>
-                <path d="M130 195c-5 0-9 4-9 9 0 4 3 8 7 9v27c0 2 1 3 2 3s2-1 2-3v-27c4-1 7-5 7-9 0-5-4-9-9-9z"
-                      fill="rgba(255,255,255,.35)"/>
+                  <!-- shackle (moves up on open) -->
+                  <path id="shackle" d="M280 168v-32c0-24 16-40 40-40s40 16 40 40v32"
+                        fill="none" stroke="url(#steel)" stroke-width="12" stroke-linecap="round"/>
 
-                <!-- small corner bolts -->
-                <circle cx="62" cy="136" r="4" fill="rgba(255,255,255,.25)"/>
-                <circle cx="198" cy="136" r="4" fill="rgba(255,255,255,.25)"/>
-                <circle cx="62" cy="270" r="4" fill="rgba(255,255,255,.25)"/>
-                <circle cx="198" cy="270" r="4" fill="rgba(255,255,255,.25)"/>
+                  <!-- body -->
+                  <path d="M258 168h124c12 0 22 10 22 22v48c0 26-20 46-46 46h-76c-26 0-46-20-46-46v-48c0-12 10-22 22-22z"
+                        fill="url(#door)" stroke="rgba(255,255,255,.14)" stroke-width="2"/>
+
+                  <!-- keyhole plate -->
+                  <circle cx="320" cy="214" r="34" fill="rgba(0,0,0,.25)" stroke="rgba(85,214,255,.18)" stroke-width="2"/>
+                  <path d="M320 200c-8 0-14 6-14 14 0 5 3 10 8 12v20c0 3 2 5 6 5s6-2 6-5v-20c5-2 8-7 8-12 0-8-6-14-14-14z"
+                        fill="rgba(85,214,255,.85)"/>
+                </g>
+
+                <!-- Small bolts -->
+                <circle cx="188" cy="94" r="4" fill="rgba(255,255,255,.25)"/>
+                <circle cx="452" cy="94" r="4" fill="rgba(255,255,255,.25)"/>
+                <circle cx="188" cy="232" r="4" fill="rgba(255,255,255,.25)"/>
+                <circle cx="452" cy="232" r="4" fill="rgba(255,255,255,.25)"/>
               </svg>
 
               <canvas class="confetti" id="confetti"></canvas>
+              <div class="finalBanner" id="finalBanner">
+                ACCESS GRANTED — VAULT OPENED
+                <small id="finalSub">Code verified successfully.</small>
+              </div>
             </div>
-
-            <div class="keysCol" id="keysRight"></div>
           </div>
 
-          <div class="keysMobile" id="keysMobile"></div>
-
-          <div class="footerRow">
-            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-              <div class="bar"><i id="barFill"></i></div>
-              <span class="hint" id="barText">0% keys used</span>
-            </div>
-            <span class="kbd">Tap the next key to proceed</span>
-          </div>
         </div>
       </div>
     </section>
@@ -560,7 +629,7 @@
     <aside class="side">
       <div class="sideInner">
         <h2>Session Summary</h2>
-        <p>Clean GBL data: key-wise accuracy, time, and where learners get stuck.</p>
+        <p>Logs are clean: digit-by-digit progress, recovery usage, and time-to-complete.</p>
 
         <div class="stats">
           <div class="stat"><b id="acc">0%</b><span>Accuracy</span></div>
@@ -570,11 +639,7 @@
         </div>
 
         <div class="note" id="note">
-          <b>Rule:</b> One attempt per key. Correct keys activate the lock. Wrong keys jam permanently.
-        </div>
-
-        <div style="margin-top:10px;color:var(--muted);font-size:12.5px;line-height:1.4">
-          <b>Design note:</b> This keeps mechanics simple so attention stays on the Email Security concepts.
+          <b>Status:</b> Press <b>Start</b> to begin. You will answer one MCQ per digit.
         </div>
       </div>
     </aside>
@@ -586,15 +651,18 @@
   <div class="modal" id="modal">
     <div class="mHead">
       <div>
-        <h3 id="mTitle">KEY 1</h3>
-        <small id="mSub">One attempt only</small>
+        <h3 id="mTitle">Digit 1</h3>
+        <small id="mSub">One attempt • Recovery appears only if wrong</small>
+        <div id="modeBadge" class="badge">MAIN QUESTION</div>
       </div>
       <button class="btn" id="closeBtn" type="button">Close</button>
     </div>
+
     <div class="mBody">
       <div class="qText" id="qText"></div>
       <div class="choices" id="choices"></div>
     </div>
+
     <div class="mFoot">
       <div id="feedback" style="color:var(--muted)">Choose the best answer.</div>
       <button class="btn primary" id="nextBtn" type="button" disabled>Continue</button>
@@ -605,311 +673,247 @@
 <div class="toast" id="toast"></div>
 
 <script>
-/* ===========================
-   Question Bank (Email Security chapter-derived)
-   - No "All of the above"
-   - Balanced correct options
-=========================== */
+/* ============================================================
+   Email Security MCQs (built from the uploaded chapter content)
+   Key verified facts included:
+   - Spam warning signs (unknown sender, misspellings like p0rn, offers too good, mismatch subject/content, urgent offer end date, request to forward, virus warning, attachments incl .exe)
+   - Enigmail + GnuPG add OpenPGP to Thunderbird
+   - GnuPG protects only content and attachments you encrypt
+   - Never encrypted: Subject line, sender email, recipients email, real names
+   - Inline PGP vs PGP/MIME: inline leaves attachment filenames unencrypted; chapter advises always use PGP/MIME
+============================================================ */
+
 const QUESTION_BANK = [
+  // SPAM / Scam section
   {
-    q: "Phishing emails are mainly designed to:",
+    q: "Which is a warning sign of spam mentioned in the chapter?",
     choices: [
-      "Improve email delivery speed",
-      "Trick users into revealing confidential information or installing malware",
-      "Increase storage quota in webmail",
-      "Automatically encrypt all messages"
-    ],
-    answerIndex: 1,
-    feedbackCorrect: "Correct: Phishing attempts to steal information or deliver malware.",
-    feedbackWrong: "Incorrect: Phishing is used to steal information or deliver malware."
-  },
-  {
-    q: "A common phishing technique is to:",
-    choices: [
-      "Send a link to a hoax but authentic-looking website",
-      "Only send emails in plain text to avoid filters",
-      "Disable attachments in all email clients",
-      "Use BCC for every message"
+      "You don’t know the sender",
+      "The email is always digitally signed",
+      "The email only contains plain text",
+      "The email is sent from your own domain"
     ],
     answerIndex: 0,
-    feedbackCorrect: "Correct: Phishing often uses hoax websites that look genuine.",
-    feedbackWrong: "Incorrect: A classic phishing method is a fake website link."
+    feedbackCorrect: "Correct: Unknown sender is listed as a spam warning sign.",
+    feedbackWrong: "Incorrect: The chapter lists unknown sender as a spam warning sign.",
+    recovery: { q: "True/False: A message from an unknown sender can be a spam warning sign.", answerIndex: 0 }
   },
   {
-    q: "Which sign may indicate a phishing email?",
+    q: "The chapter notes spam may use misspellings like “p0rn” mainly to:",
     choices: [
-      "The email uses strong encryption automatically",
-      "The sender’s email address differs from the organisation’s real website domain",
-      "The email is always sent from your own contacts only",
-      "The subject line is always empty"
+      "Improve grammar",
+      "Fool spam filters",
+      "Encrypt the subject line",
+      "Increase attachment size"
     ],
     answerIndex: 1,
-    feedbackCorrect: "Correct: Mismatched sender/website domains are a known warning sign.",
-    feedbackWrong: "Incorrect: A mismatched sender domain is a key warning sign."
+    feedbackCorrect: "Correct: Misspellings are used to fool spam filters.",
+    feedbackWrong: "Incorrect: The purpose is to fool spam filters.",
+    recovery: { q: "True/False: Misspellings like “p0rn” can be used to fool spam filters.", answerIndex: 0 }
   },
   {
-    q: "A recommended safe action when you are unsure about an email is to:",
+    q: "Which spam sign is explicitly mentioned in the chapter?",
     choices: [
-      "Click the link to verify quickly",
-      "Reply to ask for confirmation",
-      "Contact the organisation using a phone number you know is authentic",
-      "Forward it to colleagues for advice"
+      "The subject line and contents do not match",
+      "The email uses a strong passphrase",
+      "The email is always short",
+      "The email contains no links"
     ],
-    answerIndex: 2,
-    feedbackCorrect: "Correct: Verify using an independent, trusted contact method.",
-    feedbackWrong: "Incorrect: The safest step is to contact via a known authentic number."
+    answerIndex: 0,
+    feedbackCorrect: "Correct: Subject line/content mismatch is listed as a warning sign.",
+    feedbackWrong: "Incorrect: The chapter lists subject/content mismatch as a warning sign.",
+    recovery: { q: "True/False: A mismatch between subject and content is a spam warning sign.", answerIndex: 0 }
   },
   {
-    q: "A safe practice for links in suspicious emails is to:",
+    q: "The chapter lists which of these as a spam warning sign?",
     choices: [
-      "Open them only on mobile phones",
-      "Hover over the link to reveal the true destination before clicking",
-      "Click immediately, then close the tab",
-      "Copy the link into a public forum to ask others"
+      "An urgent offer end date (e.g., “Buy now and get 50% off”)",
+      "A verified invoice number",
+      "A personal greeting from your known contact",
+      "A message with no subject line"
     ],
-    answerIndex: 1,
-    feedbackCorrect: "Correct: Hovering can reveal the actual destination URL.",
-    feedbackWrong: "Incorrect: Hovering helps reveal the true destination before clicking."
+    answerIndex: 0,
+    feedbackCorrect: "Correct: Urgent offer end dates are listed as a spam warning sign.",
+    feedbackWrong: "Incorrect: Urgent offer end dates are listed as spam warning signs.",
+    recovery: { q: "True/False: Spam may include an urgent offer end date.", answerIndex: 0 }
   },
   {
-    q: "Why is replying to spam risky?",
+    q: "A spam email may contain a request to:",
     choices: [
-      "It deletes your inbox automatically",
-      "It confirms to spammers that your email address exists",
-      "It forces your email provider to disable your account",
-      "It encrypts your messages permanently"
+      "Forward the email to multiple people (sometimes offering money)",
+      "Verify the GnuPG fingerprint",
+      "Create a revocation certificate immediately",
+      "Disable PGP/MIME permanently"
     ],
-    answerIndex: 1,
-    feedbackCorrect: "Correct: Replying validates your address to spammers.",
-    feedbackWrong: "Incorrect: Replying can confirm your address is active."
+    answerIndex: 0,
+    feedbackCorrect: "Correct: The chapter mentions requests to forward emails to multiple people.",
+    feedbackWrong: "Incorrect: The chapter mentions requests to forward emails to multiple people.",
+    recovery: { q: "True/False: Spam may request you to forward an email to many people.", answerIndex: 0 }
   },
   {
-    q: "Which of the following is an example of spam?",
+    q: "The chapter notes spam may include attachments that could include:",
     choices: [
-      "A verified invoice from your vendor",
-      "An unsolicited message advertising online gambling services",
-      "A password reset you requested",
-      "A security alert from your own IT team"
+      ".exe",
+      ".txt only",
+      ".jpg only",
+      ".pdf only"
     ],
-    answerIndex: 1,
-    feedbackCorrect: "Correct: Unsolicited advertising (e.g., gambling) is typical spam.",
-    feedbackWrong: "Incorrect: Unsolicited advertising is a common spam category."
-  },
-  {
-    q: "Spammers can obtain email addresses by:",
-    choices: [
-      "Buying lists from illicit sources",
-      "Hacking legitimate websites to gather user details",
-      "Using automated software to generate addresses",
-      "All three listed methods"
-    ],
-    answerIndex: 3,
-    feedbackCorrect: "Correct: Spammers use multiple methods including automation, hacking, and bought lists.",
-    feedbackWrong: "Incorrect: The chapter describes all these as ways spammers get addresses."
-  },
-  {
-    q: "When sending to many recipients, a recommended privacy practice is to use:",
-    choices: [
-      "CC so everyone can see each other",
-      "BCC so recipients do not see others’ addresses",
-      "The subject line for addresses",
-      "No recipient field at all"
-    ],
-    answerIndex: 1,
-    feedbackCorrect: "Correct: BCC prevents sharing recipients’ email addresses.",
-    feedbackWrong: "Incorrect: BCC is recommended to protect recipients’ addresses."
-  },
-  {
-    q: "A safe webmail practice is to:",
-    choices: [
-      "Always stay signed in on shared computers",
-      "Use strong passwords and log out after use",
-      "Disable spam filtering permanently",
-      "Only use non-secure connections"
-    ],
-    answerIndex: 1,
-    feedbackCorrect: "Correct: Strong passwords and logging out are recommended.",
-    feedbackWrong: "Incorrect: Strong passwords and logging out are key webmail safety steps."
+    answerIndex: 0,
+    feedbackCorrect: "Correct: .exe is explicitly mentioned as a possible risky attachment type.",
+    feedbackWrong: "Incorrect: The chapter explicitly mentions .exe as a possible attachment type.",
+    recovery: { q: "True/False: Spam emails may contain attachments including .exe files.", answerIndex: 0 }
   },
 
-  // Thunderbird / OpenPGP section
+  // Thunderbird + OpenPGP section
   {
-    q: "Why is device encryption important when using an email client like Thunderbird?",
+    q: "According to the chapter, Enigmail and GnuPG improve security by adding support for:",
     choices: [
-      "Because Thunderbird stores a local copy of your sent and received emails",
-      "Because it increases monitor brightness",
-      "Because it blocks all phishing automatically",
-      "Because it prevents spam from being sent"
+      "OpenPGP end-to-end encryption in Thunderbird",
+      "Automatic spam deletion on the server",
+      "Faster internet speed",
+      "Unlimited email storage"
     ],
     answerIndex: 0,
-    feedbackCorrect: "Correct: Local email copies make device protection important.",
-    feedbackWrong: "Incorrect: Thunderbird stores local copies, so device encryption matters."
+    feedbackCorrect: "Correct: They add OpenPGP end-to-end encryption support to Thunderbird.",
+    feedbackWrong: "Incorrect: The chapter says Enigmail + GnuPG add OpenPGP support to Thunderbird.",
+    recovery: { q: "True/False: Enigmail and GnuPG add OpenPGP end-to-end encryption support to Thunderbird.", answerIndex: 0 }
   },
   {
-    q: "Thunderbird cannot protect you if you:",
+    q: "The chapter states GnuPG only protects the:",
     choices: [
-      "Open malicious attachments or click malicious links",
-      "Use IMAP instead of POP",
-      "Rename your folders",
-      "Use a strong password"
-    ],
-    answerIndex: 0,
-    feedbackCorrect: "Correct: Unsafe clicks/attachments can still compromise a device.",
-    feedbackWrong: "Incorrect: Clicking malicious links/opening attachments can still compromise you."
-  },
-  {
-    q: "Which option best describes IMAP compared to POP (as per the chapter)?",
-    choices: [
-      "IMAP keeps the master copy on the server and syncs across devices",
-      "IMAP deletes all mail from the server immediately",
-      "POP always syncs across devices automatically",
-      "POP stores the master copy on the server and never downloads locally"
-    ],
-    answerIndex: 0,
-    feedbackCorrect: "Correct: IMAP keeps folders on the server and syncs across devices.",
-    feedbackWrong: "Incorrect: IMAP stores the master copy on the server and syncs."
-  },
-  {
-    q: "A basic encryption indicator for email provider settings mentioned in the chapter is:",
-    choices: [
-      "SSL or STARTTLS shown for incoming/outgoing",
-      "A red background in the inbox",
-      "A GIF in the email signature",
-      "A longer subject line"
-    ],
-    answerIndex: 0,
-    feedbackCorrect: "Correct: SSL/STARTTLS indicates basic encryption support by provider.",
-    feedbackWrong: "Incorrect: SSL/STARTTLS is the indicator described."
-  },
-  {
-    q: "Why does the chapter recommend disabling HTML email display (view as plain text)?",
-    choices: [
-      "HTML email can expose you to attacks similar to those used on web browsers",
-      "Plain text emails are always shorter",
-      "HTML emails cannot be archived",
-      "Plain text prevents spam entirely"
-    ],
-    answerIndex: 0,
-    feedbackCorrect: "Correct: HTML rendering can increase exposure to certain attacks.",
-    feedbackWrong: "Incorrect: The chapter notes HTML email can expose you to browser-like attacks."
-  },
-  {
-    q: "Thunderbird’s master password is recommended mainly to:",
-    choices: [
-      "Encrypt stored passwords/passphrases in Thunderbird",
-      "Increase mailbox size",
-      "Force all emails to be encrypted end-to-end",
-      "Prevent receiving newsletters"
-    ],
-    answerIndex: 0,
-    feedbackCorrect: "Correct: A master password helps encrypt stored credentials.",
-    feedbackWrong: "Incorrect: The master password protects stored credentials in Thunderbird."
-  },
-  {
-    q: "In Thunderbird privacy preferences, disabling remote content helps because:",
-    choices: [
-      "Remote images/content can be used for tracking and other risks",
-      "It increases the font size automatically",
-      "It converts emails to PDF",
-      "It blocks outgoing mail"
-    ],
-    answerIndex: 0,
-    feedbackCorrect: "Correct: Remote content can be used to track users.",
-    feedbackWrong: "Incorrect: Remote content can be used for tracking and other risks."
-  },
-  {
-    q: "In OpenPGP, the private key should be treated as:",
-    choices: [
-      "Public information to share widely",
-      "Extremely sensitive; it can decrypt messages and sign as you",
-      "Something that can safely be emailed to others",
-      "Unimportant if you use PGP/MIME"
+      "Subject line and sender address",
+      "Content of email and attachments you encrypt",
+      "Network routing headers",
+      "Time stamps stored by mail servers"
     ],
     answerIndex: 1,
-    feedbackCorrect: "Correct: The private key is highly sensitive and must be protected.",
-    feedbackWrong: "Incorrect: The private key is extremely sensitive and must be protected."
+    feedbackCorrect: "Correct: GnuPG protects the content and the attachments you encrypt.",
+    feedbackWrong: "Incorrect: GnuPG protects the content and the attachments you encrypt.",
+    recovery: { q: "True/False: GnuPG only protects the content of email and attachments you encrypt.", answerIndex: 0 }
   },
   {
-    q: "In OpenPGP, the public key is:",
+    q: "Which information is never encrypted (as listed in the chapter)?",
     choices: [
-      "Used to read encrypted emails meant for you",
-      "Meant to be shared so others can encrypt messages to you",
-      "A secret that should never be shared",
-      "A replacement for your email password"
-    ],
-    answerIndex: 1,
-    feedbackCorrect: "Correct: Others need your public key to send you encrypted email.",
-    feedbackWrong: "Incorrect: The public key is meant to be shared for encryption to you."
-  },
-  {
-    q: "Why should you verify a correspondent’s public key (e.g., via fingerprint)?",
-    choices: [
-      "To ensure the key really belongs to the person you intend to communicate with",
-      "To increase spam filtering accuracy",
-      "To make the subject line encrypted",
-      "To remove all old emails from the server"
+      "The Subject line",
+      "The encrypted body content",
+      "Attachments you encrypt",
+      "A copy encrypted to your public key in Sent mail"
     ],
     answerIndex: 0,
-    feedbackCorrect: "Correct: Verification prevents encrypting to the wrong key (MITM risk).",
-    feedbackWrong: "Incorrect: Fingerprint verification ensures the key belongs to the right person."
+    feedbackCorrect: "Correct: The chapter lists the Subject line as never encrypted.",
+    feedbackWrong: "Incorrect: The chapter lists the Subject line as never encrypted.",
+    recovery: { q: "True/False: The Subject line is never encrypted according to the chapter.", answerIndex: 0 }
   },
   {
-    q: "A revocation certificate is important because it helps you:",
+    q: "Which information is never encrypted (as listed in the chapter)?",
     choices: [
-      "Recover deleted spam messages",
-      "Tell others a key is no longer valid (lost/compromised/forgotten passphrase)",
-      "Disable all HTML emails permanently",
-      "Increase the key length automatically"
+      "Recipients’ email addresses",
+      "Encrypted attachments",
+      "Encrypted message content",
+      "The passphrase itself"
     ],
-    answerIndex: 1,
-    feedbackCorrect: "Correct: Revocation lets you mark keys as invalid if compromised/lost, etc.",
-    feedbackWrong: "Incorrect: Revocation certificates help invalidate keys when needed."
+    answerIndex: 0,
+    feedbackCorrect: "Correct: The chapter lists recipients’ email addresses as never encrypted.",
+    feedbackWrong: "Incorrect: The chapter lists recipients’ email addresses as never encrypted.",
+    recovery: { q: "True/False: Recipients’ email addresses are never encrypted, as per the chapter.", answerIndex: 0 }
   },
   {
-    q: "According to the chapter, which information is NOT encrypted by GnuPG email encryption?",
+    q: "Which information is never encrypted (as listed in the chapter)?",
     choices: [
-      "The subject line",
+      "The sender's email address",
       "The encrypted message body",
-      "The encrypted attachments (when properly configured)",
-      "The digital signature (when used)"
+      "The OpenPGP-encrypted attachment content",
+      "The local Sent mail copy"
     ],
     answerIndex: 0,
-    feedbackCorrect: "Correct: The chapter states the subject line is not encrypted.",
-    feedbackWrong: "Incorrect: The subject line is not encrypted."
+    feedbackCorrect: "Correct: The chapter lists the sender's email address as never encrypted.",
+    feedbackWrong: "Incorrect: The chapter lists the sender's email address as never encrypted.",
+    recovery: { q: "True/False: The sender’s email address is never encrypted according to the chapter.", answerIndex: 0 }
   },
   {
-    q: "Why does the chapter recommend using PGP/MIME by default?",
+    q: "The chapter also notes that real names associated with addresses are:",
     choices: [
-      "It better handles attachment encryption (including file names) compared to inline PGP",
-      "It makes emails shorter",
-      "It prevents password reuse",
-      "It disables junk folders"
+      "Always encrypted",
+      "Never encrypted",
+      "Encrypted only in POP accounts",
+      "Encrypted only with Inline PGP"
+    ],
+    answerIndex: 1,
+    feedbackCorrect: "Correct: The chapter lists associated real names as never encrypted.",
+    feedbackWrong: "Incorrect: The chapter lists associated real names as never encrypted.",
+    recovery: { q: "True/False: Real names associated with sender/recipient addresses are never encrypted (chapter).", answerIndex: 0 }
+  },
+
+  // Inline PGP vs PGP/MIME section
+  {
+    q: "If Enigmail is configured to use Inline PGP instead of PGP/MIME, the chapter warns that:",
+    choices: [
+      "File names of attachments remain unencrypted",
+      "The subject line becomes encrypted automatically",
+      "Recipients’ addresses become encrypted",
+      "GnuPG stops working completely"
     ],
     answerIndex: 0,
-    feedbackCorrect: "Correct: PGP/MIME improves encryption handling for attachments.",
-    feedbackWrong: "Incorrect: PGP/MIME is recommended for better attachment encryption support."
+    feedbackCorrect: "Correct: Inline PGP leaves attachment file names unencrypted.",
+    feedbackWrong: "Incorrect: Inline PGP leaves attachment file names unencrypted.",
+    recovery: { q: "True/False: Inline PGP can leave attachment file names unencrypted.", answerIndex: 0 }
+  },
+  {
+    q: "The chapter recommends you should always:",
+    choices: [
+      "Use PGP/MIME",
+      "Disable encryption on Sent mail",
+      "Use Inline PGP for attachments",
+      "Put sensitive data in the subject line"
+    ],
+    answerIndex: 0,
+    feedbackCorrect: "Correct: The chapter explicitly advises always use PGP/MIME.",
+    feedbackWrong: "Incorrect: The chapter explicitly advises always use PGP/MIME.",
+    recovery: { q: "True/False: The chapter advises always using PGP/MIME.", answerIndex: 0 }
+  },
+  {
+    q: "Because some metadata is never encrypted, the chapter says it is important to:",
+    choices: [
+      "Choose subject lines carefully",
+      "Ignore subject lines completely",
+      "Always include your real name in the email account",
+      "Send attachments without encryption"
+    ],
+    answerIndex: 0,
+    feedbackCorrect: "Correct: The chapter highlights careful subject line choice.",
+    feedbackWrong: "Incorrect: The chapter says choose subject lines carefully.",
+    recovery: { q: "True/False: The chapter suggests choosing subject lines carefully since some info is never encrypted.", answerIndex: 0 }
   }
 ];
 
-/* ===========================
-   Game Settings
-=========================== */
-const KEY_COUNT = 10; // Keys shown around lock (like your sample image)
-const SCORE_PER_CORRECT = 10;
+/* ============================================================
+   Game settings
+============================================================ */
+const DIGITS_TOTAL = 10;
+const SCORE_MAIN_CORRECT = 10;
+const SCORE_RECOVERY_CORRECT = 5;
 
 let state = {
-  keys: [], // {status:'locked'|'open'|'jam', attempted:boolean, qIndex:number}
-  currentKey: null,
+  started: false,
+  codeDigits: [],
+  revealedCount: 0,
+
   score: 0,
   correct: 0,
   wrong: 0,
-  startTime: Date.now(),
-  muted: false
+
+  streak: 0,
+
+  currentQuestion: null, // {mode:'main'|'recovery', digitIndex, qObj, mainAnsweredWrong:boolean}
+  muted: false,
+
+  usedQ: [],
+  startTime: Date.now()
 };
 
-/* ===========================
-   Sound: tiny oscillator tones (no external files)
-=========================== */
+/* ============================================================
+   Sound (no external files)
+============================================================ */
 function beep(type){
   if(state.muted) return;
   const ctx = beep.ctx || (beep.ctx = new (window.AudioContext || window.webkitAudioContext)());
@@ -936,24 +940,27 @@ function beep(type){
   o.stop(now + dur + 0.02);
 }
 
-/* ===========================
-   Helpers
-=========================== */
+/* ============================================================
+   DOM helpers
+============================================================ */
 const el = (id)=>document.getElementById(id);
 const overlay = el("overlay");
 const qText = el("qText");
 const choicesEl = el("choices");
 const mTitle = el("mTitle");
+const mSub = el("mSub");
 const feedbackEl = el("feedback");
 const nextBtn = el("nextBtn");
 const closeBtn = el("closeBtn");
 const toast = el("toast");
+const modeBadge = el("modeBadge");
 
 function showToast(msg){
   toast.textContent = msg;
   toast.classList.add("show");
   setTimeout(()=>toast.classList.remove("show"), 900);
 }
+
 function clamp(n,min,max){ return Math.max(min, Math.min(max,n)); }
 function formatTime(sec){
   sec = Math.max(0, Math.floor(sec));
@@ -962,267 +969,59 @@ function formatTime(sec){
   return `${m}m ${String(s).padStart(2,"0")}s`;
 }
 
-/* ===========================
-   Key SVG (conceptual, like your reference image)
-=========================== */
-function keySVG(status, variant){
-  // variant 0..3 to vary color a bit for visuals
-  const isOpen = status === "open";
-  const isJam = status === "jam";
-
-  const palettes = [
-    {a:"#E8EEF9", b:"#7E8AA0", c:"#2B3445"},
-    {a:"#E6FFF6", b:"#34D399", c:"#0C5F43"},
-    {a:"#FFF1F2", b:"#FB7185", c:"#7A1C35"},
-    {a:"#FFF7D6", b:"#F7D36A", c:"#B8872B"}
-  ];
-
-  // default steel; open becomes gold/green; jam becomes red
-  const p = isOpen ? palettes[3] : isJam ? palettes[2] : palettes[0];
-  const accent = isOpen ? "rgba(247,211,106,.55)" : isJam ? "rgba(255,90,122,.35)" : "rgba(85,214,255,.18)";
-
-  // flip key direction based on side
-  const flip = variant === 1 ? "scale(-1,1) translate(-120,0)" : "";
-
-  return `
-  <svg class="keyIcon" viewBox="0 0 120 40" aria-hidden="true">
-    <defs>
-      <linearGradient id="kg_${variant}_${status}" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="${p.a}"/>
-        <stop offset=".5" stop-color="${p.b}"/>
-        <stop offset="1" stop-color="${p.c}"/>
-      </linearGradient>
-    </defs>
-    <g transform="${flip}">
-      <rect x="6" y="16" width="70" height="10" rx="5" fill="url(#kg_${variant}_${status})"/>
-      <circle cx="90" cy="21" r="14" fill="url(#kg_${variant}_${status})"/>
-      <circle cx="90" cy="21" r="7" fill="rgba(0,0,0,.45)"/>
-      <rect x="18" y="23" width="10" height="7" rx="2" fill="rgba(0,0,0,.35)"/>
-      <rect x="32" y="23" width="10" height="7" rx="2" fill="rgba(0,0,0,.35)"/>
-
-      <path d="M6 21h70" stroke="${accent}" stroke-width="3" stroke-linecap="round" opacity=".7"/>
-    </g>
-  </svg>`;
-}
-
-/* ===========================
-   Build keys UI (left/right + mobile)
-=========================== */
-function nextPlayableKeyIndex(){
-  return state.keys.findIndex(k => k.status === "locked");
-}
-
-function renderKeys(){
-  const left = el("keysLeft");
-  const right = el("keysRight");
-  const mob = el("keysMobile");
-  left.innerHTML = "";
-  right.innerHTML = "";
-  mob.innerHTML = "";
-
-  state.keys.forEach((k, idx)=>{
-    const nextIdx = nextPlayableKeyIndex();
-    const playable = idx === nextIdx;
-    const lockedOut = (k.status === "locked" && !playable);
-
-    const pipClass = k.status === "open" ? "statusPip good" :
-                     k.status === "jam" ? "statusPip bad" : "statusPip";
-
-    const hint = k.status === "open" ? "Activated" :
-                 k.status === "jam" ? "Jammed" :
-                 playable ? "Tap to attempt" : "Locked (in order)";
-
-    // Desktop button
-    const btn = document.createElement("div");
-    btn.className = "keyBtn" + (lockedOut ? " disabled" : "");
-    btn.setAttribute("role","button");
-    btn.setAttribute("tabindex", lockedOut ? "-1" : "0");
-    btn.innerHTML = `
-      <div class="keyLabel">
-        <b>KEY ${idx+1}</b>
-        <small>${hint}</small>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <i class="${pipClass}" aria-hidden="true"></i>
-        ${keySVG(k.status, idx%2)}
-      </div>
-    `;
-    btn.addEventListener("click", ()=>onKeyClick(idx));
-    btn.addEventListener("keydown", (e)=>{
-      if(e.key==="Enter" || e.key===" "){ e.preventDefault(); onKeyClick(idx); }
-    });
-
-    // split keys like your reference image: 5 left, 5 right
-    if(idx < Math.ceil(KEY_COUNT/2)) left.appendChild(btn);
-    else right.appendChild(btn);
-
-    // Mobile cards
-    const card = document.createElement("div");
-    card.className = "keyCard" + (lockedOut ? " disabled" : "");
-    card.innerHTML = `
-      <div>
-        <b>KEY ${idx+1}</b>
-        <small>${hint}</small>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <i class="${pipClass}" aria-hidden="true"></i>
-      </div>
-    `;
-    card.addEventListener("click", ()=>onKeyClick(idx));
-    mob.appendChild(card);
-  });
-}
-
-/* ===========================
-   Modal logic
-=========================== */
-function onKeyClick(idx){
-  const nextIdx = nextPlayableKeyIndex();
-  if(idx !== nextIdx){
-    showToast("Use keys in order.");
-    beep("click");
-    return;
+/* ============================================================
+   Question selection (avoid repetition until needed)
+============================================================ */
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
   }
-  const k = state.keys[idx];
-  if(k.attempted){
-    showToast("Already attempted.");
-    return;
-  }
-  state.currentKey = idx;
-  openQuestion(idx);
+  return arr;
 }
 
-function openQuestion(keyIdx){
-  const k = state.keys[keyIdx];
-  const qObj = QUESTION_BANK[k.qIndex];
-
-  mTitle.textContent = `KEY ${keyIdx+1}`;
-  el("mSub").textContent = "One attempt only • choose carefully";
-  qText.textContent = qObj.q;
-
-  feedbackEl.textContent = "Choose the best answer.";
-  nextBtn.disabled = true;
-  choicesEl.innerHTML = "";
-
-  qObj.choices.forEach((ch, i)=>{
-    const b = document.createElement("button");
-    b.className = "choice";
-    b.type = "button";
-    b.textContent = ch;
-    b.addEventListener("click", ()=>answer(keyIdx, i));
-    choicesEl.appendChild(b);
-  });
-
-  overlay.classList.add("show");
-  beep("click");
+function resetQuestionDeck(){
+  state.usedQ = shuffle([...Array(QUESTION_BANK.length).keys()]);
 }
 
-function closeModal(){
-  overlay.classList.remove("show");
-  state.currentKey = null;
+function nextMainQuestion(){
+  if(state.usedQ.length === 0) resetQuestionDeck();
+  const idx = state.usedQ.pop();
+  return QUESTION_BANK[idx];
 }
 
-closeBtn.addEventListener("click", ()=>{beep("click"); closeModal();});
-overlay.addEventListener("click", (e)=>{
-  if(e.target === overlay){beep("click"); closeModal();}
-});
+/* ============================================================
+   Digits UI
+============================================================ */
+function renderDigits(){
+  const box = el("digits");
+  box.innerHTML = "";
 
-nextBtn.addEventListener("click", ()=>{
-  beep("click");
-  closeModal();
-  checkCompletion();
-});
-
-function disableChoices(){
-  [...choicesEl.querySelectorAll(".choice")].forEach(x=>x.disabled = true);
-}
-
-function answer(keyIdx, chosenIndex){
-  const k = state.keys[keyIdx];
-  if(k.attempted) return;
-
-  k.attempted = true;
-
-  const qObj = QUESTION_BANK[k.qIndex];
-  const correct = chosenIndex === qObj.answerIndex;
-
-  disableChoices();
-
-  // Color choices
-  const btns = [...choicesEl.querySelectorAll(".choice")];
-  btns.forEach((b, i)=>{
-    if(i === qObj.answerIndex) b.classList.add("good");
-    if(i === chosenIndex && !correct) b.classList.add("bad");
-  });
-
-  if(correct){
-    k.status = "open";
-    state.score += SCORE_PER_CORRECT;
-    state.correct += 1;
-    feedbackEl.textContent = qObj.feedbackCorrect || "Correct.";
-    beep("good");
-    successFX();
-    showToast("Key activated!");
-  }else{
-    k.status = "jam";
-    state.wrong += 1;
-    feedbackEl.textContent = qObj.feedbackWrong || "Wrong.";
-    beep("bad");
-    failFX();
-    showToast("Key jammed!");
-  }
-
-  nextBtn.disabled = false;
-  renderKeys();
-  updateHUD();
-}
-
-function successFX(){
-  // bright pulse + confetti
-  el("arena").classList.remove("pulse");
-  void el("arena").offsetWidth;
-  el("arena").classList.add("pulse");
-  fireConfetti(false);
-}
-
-function failFX(){
-  el("arena").classList.remove("shake");
-  void el("arena").offsetWidth;
-  el("arena").classList.add("shake");
-}
-
-/* ===========================
-   Completion logic
-=========================== */
-function checkCompletion(){
-  const remaining = state.keys.filter(k=>k.status==="locked").length;
-  if(remaining !== 0) return;
-
-  const anyJam = state.keys.some(k=>k.status==="jam");
-  if(anyJam){
-    el("note").innerHTML = "<b>Result:</b> Access denied. Some keys jammed. Reset to try again.";
-    showToast("Access denied.");
-    beep("bad");
-  }else{
-    el("note").innerHTML = "<b>Result:</b> Vault unlocked successfully. Well done.";
-    showToast("Vault unlocked!");
-    beep("win");
-    fireConfetti(true);
-    el("lockGlow").animate([
-      {transform:"scale(1)", opacity:1},
-      {transform:"scale(1.08)", opacity:1},
-      {transform:"scale(1)", opacity:1}
-    ], {duration: 700, easing:"ease-out"});
+  for(let i=0;i<DIGITS_TOTAL;i++){
+    const d = document.createElement("div");
+    d.className = "digit" + (i < state.revealedCount ? " revealed" : "");
+    if(i < state.revealedCount){
+      d.innerHTML = `<span>${state.codeDigits[i]}</span>`;
+    }else{
+      d.innerHTML = `<div class="blur"></div>`;
+    }
+    box.appendChild(d);
   }
 }
 
-/* ===========================
+function popDigit(i){
+  const digitEl = el("digits").children[i];
+  if(!digitEl) return;
+  digitEl.classList.add("revealPop");
+  setTimeout(()=>digitEl.classList.remove("revealPop"), 420);
+}
+
+/* ============================================================
    HUD
-=========================== */
+============================================================ */
 function updateHUD(){
-  const done = state.keys.filter(k=>k.status!=="locked").length;
-  el("done").textContent = String(done);
-  el("total").textContent = String(KEY_COUNT);
+  el("done").textContent = String(state.revealedCount);
+  el("total").textContent = String(DIGITS_TOTAL);
   el("score").textContent = String(state.score);
 
   const attempted = state.correct + state.wrong;
@@ -1234,21 +1033,284 @@ function updateHUD(){
   const sec = (Date.now() - state.startTime)/1000;
   el("time").textContent = formatTime(sec);
 
-  const pct = Math.round((done/KEY_COUNT)*100);
+  el("progressText").textContent = `Digits Verified: ${state.revealedCount} / ${DIGITS_TOTAL}`;
+  el("streakText").textContent = `Streak: ${state.streak}`;
+
+  const pct = Math.round((state.revealedCount / DIGITS_TOTAL) * 100);
   el("barFill").style.width = pct + "%";
-  el("barText").textContent = `${pct}% keys used`;
+  el("barText").textContent = `${pct}% verified`;
 }
 setInterval(updateHUD, 500);
 
-/* ===========================
+/* ============================================================
+   Modal
+============================================================ */
+function openModal(mode, digitIndex, qObj){
+  state.currentQuestion = { mode, digitIndex, qObj };
+
+  mTitle.textContent = `Digit ${digitIndex + 1}`;
+  if(mode === "main"){
+    mSub.textContent = "Main question • One attempt";
+    modeBadge.textContent = "MAIN QUESTION";
+    modeBadge.className = "badge";
+    feedbackEl.textContent = "Choose the best answer.";
+  }else{
+    mSub.textContent = "Recovery question • One attempt";
+    modeBadge.textContent = "RECOVERY";
+    modeBadge.className = "badge bad";
+    feedbackEl.textContent = "Answer to recover the digit.";
+  }
+
+  nextBtn.disabled = true;
+  choicesEl.innerHTML = "";
+
+  if(mode === "main"){
+    qText.textContent = qObj.q;
+    qObj.choices.forEach((ch, i)=>{
+      const b = document.createElement("button");
+      b.className = "choice";
+      b.type = "button";
+      b.textContent = ch;
+      b.addEventListener("click", ()=> answerMain(i));
+      choicesEl.appendChild(b);
+    });
+  }else{
+    qText.textContent = qObj.recovery.q;
+    const opts = ["True","False"];
+    opts.forEach((ch, i)=>{
+      const b = document.createElement("button");
+      b.className = "choice";
+      b.type = "button";
+      b.textContent = ch;
+      b.addEventListener("click", ()=> answerRecovery(i));
+      choicesEl.appendChild(b);
+    });
+  }
+
+  overlay.classList.add("show");
+  beep("click");
+}
+
+function closeModal(){
+  overlay.classList.remove("show");
+}
+
+closeBtn.addEventListener("click", ()=>{beep("click"); closeModal();});
+overlay.addEventListener("click", (e)=>{
+  if(e.target === overlay){beep("click"); closeModal();}
+});
+
+nextBtn.addEventListener("click", ()=>{
+  beep("click");
+  closeModal();
+
+  // Continue automatically if not finished
+  if(state.revealedCount < DIGITS_TOTAL){
+    // Small delay so the learner sees the digit reveal
+    setTimeout(()=> askNextDigit(), 260);
+  }else{
+    // Completed already — do nothing; animation handles.
+  }
+});
+
+function disableChoices(){
+  [...choicesEl.querySelectorAll(".choice")].forEach(x=>x.disabled = true);
+}
+
+/* ============================================================
+   Answer handling
+============================================================ */
+function answerMain(chosenIndex){
+  const { digitIndex, qObj } = state.currentQuestion;
+
+  disableChoices();
+
+  const correct = chosenIndex === qObj.answerIndex;
+  const btns = [...choicesEl.querySelectorAll(".choice")];
+
+  btns.forEach((b, i)=>{
+    if(i === qObj.answerIndex) b.classList.add("good");
+    if(i === chosenIndex && !correct) b.classList.add("bad");
+  });
+
+  if(correct){
+    state.score += SCORE_MAIN_CORRECT;
+    state.correct += 1;
+    state.streak += 1;
+    feedbackEl.textContent = qObj.feedbackCorrect || "Correct.";
+    modeBadge.className = "badge good";
+    beep("good");
+    revealDigit(digitIndex, true);
+    nextBtn.disabled = false;
+  }else{
+    state.wrong += 1;
+    state.streak = 0;
+    feedbackEl.textContent = qObj.feedbackWrong || "Wrong. Recovery question will appear.";
+    modeBadge.className = "badge bad";
+    beep("bad");
+
+    // After brief pause show recovery
+    setTimeout(()=>{
+      openModal("recovery", digitIndex, qObj);
+    }, 650);
+
+    // Keep next disabled for now; recovery modal will manage it.
+    nextBtn.disabled = true;
+  }
+}
+
+function answerRecovery(chosenIndex){
+  const { digitIndex, qObj } = state.currentQuestion;
+  disableChoices();
+
+  const correct = chosenIndex === qObj.recovery.answerIndex;
+  const btns = [...choicesEl.querySelectorAll(".choice")];
+  btns.forEach((b, i)=>{
+    if(i === qObj.recovery.answerIndex) b.classList.add("good");
+    if(i === chosenIndex && !correct) b.classList.add("bad");
+  });
+
+  if(correct){
+    state.score += SCORE_RECOVERY_CORRECT;
+    state.correct += 1; // counts as correct for analytics
+    feedbackEl.textContent = "Recovered — digit verified.";
+    modeBadge.className = "badge good";
+    beep("good");
+    revealDigit(digitIndex, false);
+  }else{
+    state.wrong += 1;
+    feedbackEl.textContent = "Recovery failed — digit remains locked.";
+    modeBadge.className = "badge bad";
+    beep("bad");
+    // Still move on to next digit attempt (same digit remains locked, but we advance)
+    // In this design, each digit is tied to one attempt cycle. To keep it fair,
+    // we do NOT retry the same digit; we proceed but the digit stays blurred.
+    // However, to ensure completion is possible, we allow extra questions after 10 attempts.
+  }
+
+  nextBtn.disabled = false;
+}
+
+/* ============================================================
+   Digit progression model (practical and MOOC-safe)
+   - Target is 10 revealed digits.
+   - Each "round" is tied to revealing the next unrevealed digit.
+   - If recovery fails, we simply do NOT increment revealedCount.
+   - Then we continue asking new questions until all 10 digits are revealed.
+============================================================ */
+function revealDigit(digitIndex, fromMain){
+  // Reveal the next unrevealed digit (digitIndex should match revealedCount)
+  if(digitIndex !== state.revealedCount) return;
+
+  state.revealedCount += 1;
+  renderDigits();
+  popDigit(digitIndex);
+
+  // Visual pulse
+  const arena = el("arena");
+  arena.classList.remove("unlockPulse");
+  void arena.offsetWidth;
+  arena.classList.add("unlockPulse");
+
+  // Confetti micro burst
+  fireConfetti(false);
+
+  showToast(fromMain ? "Digit revealed!" : "Digit recovered!");
+  el("nextHint").textContent = "Next digit unlocked";
+  el("note").innerHTML = `<b>Status:</b> Digit ${state.revealedCount} verified. Continue to unlock the vault.`;
+
+  if(state.revealedCount >= DIGITS_TOTAL){
+    finishVault();
+  }
+}
+
+/* ============================================================
+   Game loop
+============================================================ */
+function askNextDigit(){
+  if(!state.started) return;
+
+  if(state.revealedCount >= DIGITS_TOTAL){
+    finishVault();
+    return;
+  }
+
+  const digitIndex = state.revealedCount;
+  const qObj = nextMainQuestion();
+  openModal("main", digitIndex, qObj);
+
+  el("nextHint").textContent = `Attempt Digit ${digitIndex + 1}`;
+}
+
+function startGame(){
+  if(state.started) return;
+  state.started = true;
+  state.startTime = Date.now();
+  el("startBtn").disabled = true;
+  el("nextHint").textContent = "Attempt Digit 1";
+  el("note").innerHTML = "<b>Status:</b> Game started. Answer MCQs to reveal digits.";
+  askNextDigit();
+}
+
+function resetGame(){
+  state.started = false;
+  state.codeDigits = Array.from({length: DIGITS_TOTAL}, ()=> Math.floor(Math.random()*10));
+  state.revealedCount = 0;
+
+  state.score = 0;
+  state.correct = 0;
+  state.wrong = 0;
+  state.streak = 0;
+
+  state.currentQuestion = null;
+  state.startTime = Date.now();
+
+  resetQuestionDeck();
+  renderDigits();
+  updateHUD();
+
+  // Reset visuals
+  el("vaultStage").classList.remove("vaultDoorsOpen");
+  el("finalBanner").classList.remove("show");
+  el("finalSub").textContent = "Code verified successfully.";
+  el("startBtn").disabled = false;
+  el("nextHint").textContent = "Press Start";
+  el("note").innerHTML = "<b>Status:</b> Press <b>Start</b> to begin. You will answer one MCQ per digit.";
+
+  showToast("Reset done.");
+}
+
+/* ============================================================
+   Finish animation (lock opens + vault opens)
+============================================================ */
+function finishVault(){
+  // Prevent multiple triggers
+  if(el("vaultStage").classList.contains("vaultDoorsOpen")) return;
+
+  closeModal();
+
+  // Big confetti + animation
+  const stage = el("vaultStage");
+  stage.classList.add("vaultDoorsOpen");
+  fireConfetti(true);
+  beep("win");
+
+  el("finalBanner").classList.add("show");
+  el("finalSub").textContent = "All 10 digits verified from Email Security concepts.";
+
+  el("note").innerHTML = "<b>Result:</b> Access granted. Vault opened successfully.";
+  el("nextHint").textContent = "Vault opened";
+}
+
+/* ============================================================
    Confetti
-=========================== */
+============================================================ */
 const confettiCanvas = el("confetti");
 const ctx2 = confettiCanvas.getContext("2d");
 let confettiParticles = [];
 
 function resizeConfettiCanvas(){
-  const arena = el("arena");
+  const arena = el("vaultStage");
   const r = arena.getBoundingClientRect();
   confettiCanvas.width = Math.floor(r.width * devicePixelRatio);
   confettiCanvas.height = Math.floor(r.height * devicePixelRatio);
@@ -1258,16 +1320,17 @@ function resizeConfettiCanvas(){
 window.addEventListener("resize", resizeConfettiCanvas);
 
 function fireConfetti(big){
+  resizeConfettiCanvas();
   confettiCanvas.classList.add("show");
   setTimeout(()=>confettiCanvas.classList.remove("show"), 1200);
 
   const w = confettiCanvas.width, h = confettiCanvas.height;
-  const count = big ? 180 : 70;
+  const count = big ? 200 : 70;
 
   for(let i=0;i<count;i++){
     confettiParticles.push({
       x: w*0.5 + (Math.random()-0.5)*w*0.30,
-      y: h*0.20 + (Math.random()-0.5)*h*0.10,
+      y: h*0.25 + (Math.random()-0.5)*h*0.10,
       vx: (Math.random()-0.5) * (big ? 8 : 5) * devicePixelRatio,
       vy: (Math.random()*6 + 4) * devicePixelRatio,
       r: (Math.random()*5 + 3) * devicePixelRatio,
@@ -1278,6 +1341,7 @@ function fireConfetti(big){
     });
   }
 }
+
 function tickConfetti(){
   const w = confettiCanvas.width, h = confettiCanvas.height;
   ctx2.clearRect(0,0,w,h);
@@ -1293,7 +1357,6 @@ function tickConfetti(){
     ctx2.translate(p.x, p.y);
     ctx2.rotate(p.rot);
     ctx2.globalAlpha = clamp(p.life,0,1);
-    // random HSL (no fixed palette)
     ctx2.fillStyle = `hsl(${Math.floor(Math.random()*360)}, 90%, 60%)`;
     ctx2.fillRect(-p.r, -p.r*0.5, p.r*2, p.r);
     ctx2.restore();
@@ -1304,43 +1367,22 @@ function tickConfetti(){
 }
 tickConfetti();
 
-/* ===========================
-   Init / Reset
-=========================== */
-function init(){
-  state.score = 0;
-  state.correct = 0;
-  state.wrong = 0;
-  state.startTime = Date.now();
-  state.currentKey = null;
-
-  // assign first N questions; if fewer, loop (better to keep bank >= KEY_COUNT)
-  state.keys = Array.from({length: KEY_COUNT}, (_, i)=>({
-    status: "locked",
-    attempted: false,
-    qIndex: i % QUESTION_BANK.length
-  }));
-
-  renderKeys();
-  updateHUD();
-  resizeConfettiCanvas();
-
-  el("note").innerHTML = "<b>Rule:</b> One attempt per key. Correct keys activate the lock. Wrong keys jam permanently.";
-}
-
-el("resetBtn").addEventListener("click", ()=>{
-  beep("click");
-  init();
-  showToast("Reset done.");
-});
-
+/* ============================================================
+   Buttons
+============================================================ */
+el("startBtn").addEventListener("click", ()=>{ beep("click"); startGame(); });
+el("resetBtn").addEventListener("click", ()=>{ beep("click"); resetGame(); });
 el("muteBtn").addEventListener("click", ()=>{
   state.muted = !state.muted;
   el("muteBtn").textContent = state.muted ? "🔇 Muted" : "🔊 Sound";
   showToast(state.muted ? "Sound off" : "Sound on");
 });
 
-init();
+/* ============================================================
+   Init
+============================================================ */
+resetGame();
+resizeConfettiCanvas();
 </script>
 </body>
 </html>
